@@ -50,7 +50,7 @@ Répare tous les attributs de la page en une seule passe. Utilise le flag `isFix
 ### `initScript()`
 Initialise le système : appelle `setupAttributeObserver()`, installe un observer global pour détecter les nouveaux éléments DOM, et enregistre un listener sur l'événement `focus` pour réappliquer la protection lors des interactions utilisateur.
 
-![[TECH/PROJETS/01/script.png]]
+![[images/script.png]]
 
 # Mise en oeuvre
 
@@ -164,7 +164,7 @@ Example: .css-persoTask */
 
 # Résultat
 Exemple (voir : observer_tests.md) :
-![[TECH/PROJETS/01/PAGE de TESTS.png]]
+![[images/observer_tests.png]]
 
 
 
