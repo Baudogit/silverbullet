@@ -163,7 +163,8 @@ Example: .css-persoTask */
 ````
 
 # Résultat
-Exemple (voir : observer_tests.md) :
+Exemple :
+
 ![[images/observer_tests.png]]
 
 
