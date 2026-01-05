@@ -9,7 +9,7 @@ Les classes CSS associés aux attributs de tâche ne permettent pas, actuellemen
 - la classe générique "sb-frontmatter" est commune à tous les attributs (de tâche, de liste et de page, y compris les attributs définis dans le frontmatter)
 - la valeur d'attribut, stockée dans un <`span`> dédié, n'est pas associée à une classe spécifique
   
-![[TECH/PROJETS/01/classes.png]] 
+![[images/classes.png]] 
 => une issue [https://github.com/silverbulletmd/silverbullet/issues/1740 ](https://github.com/silverbulletmd/silverbullet/issues/1740) a été récemment créée par @Zeff Hemel pour étendre les possibilités de personnalisation via des balises de données ("data-*") associées à la valeur d’attribut.
 
 **Ce script js est une solution d’attente, cohérente avec l’évolution prévue.**
