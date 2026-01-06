@@ -1,6 +1,8 @@
 
 ```lua
 
+-- priority: -1
+
 -- Importer le script
 local observer = js.import("/.fs/Library/observer.js")
 
