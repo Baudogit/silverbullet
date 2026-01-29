@@ -1,14 +1,17 @@
 ---
-Maj: 2026-01-27
-Author: baudo
+name: Library/baudogit/TaskExplorer
+tags: meta/library
+maj: 2026-01-29
 pageDecoration.prefix: "📋 "
-Files:
+files:
 - TaskExplorer.md
 - lucide-icons.svg
 - ConfigStyles_for_TaskExplorer.md
 - Instructions_for_Task_Explorer.md
 - where-examples.txt
 - where-history.txt
+- 12.png (for Instructions_for_Task_Explorer.md)
+- 13.png (for Instructions_for_Task_Explorer.md)
 share.uri: "github:Baudogit/silverbullet/tree/main/TaskExplorer"
 ---
 
@@ -89,8 +92,6 @@ To activate these features, use the **Filter/Query toggle button** or click dire
 A click on one of these items transfers its content to the input area.
 
 To hide the drop-down menus, you can press Esc at any time or press X button.
-
-      💡How to use the input box ?
       
       The input area accepts direct keyboard entry, copy-paste operation and paste from the menu.     
       After changing the content of input box:
@@ -98,12 +99,12 @@ To hide the drop-down menus, you can press Esc at any time or press X button.
           - where mode: deferred application. Press Enter to execute the query.
     To exit the input area and hide the context menus, press Esc or click the X button.  
 
-> **success** **Very important !**
+> **success** **Important !**
 >  Rules for filtering and designing custom where clauses are outlined in a markdown page displayed via a button on the toolbar ==Instructions_for_Task_Explorer.md==.
 
 ---
 
-# Concepts and limits
+# Technical concepts
 
 ## 🪟Multi-windowing
 
@@ -119,16 +120,16 @@ Access to these features is **however limited** as of 01/21/2026:
 1- the management of the ==rhs== panel by SilverBullet is buggy: as soon as you start to type in the main window, the panel disappears. An issue was opened on 01/15/2026: [Bug: rhs panel is completely removed from the DOM when typing # 1779](https://github.com/silverbulletmd/silverbullet/issues/1779)
 2- management of the ==bhs== panel by Mr.Red's `UnifiedAdvancedPanelControl.js` library is partial. A complementary development would be appreciated.
 
-⚠️ **Consequences**
+⚠️ **Consequences / Limits**
 
-    According to the panel assigned to Task Explorer (see below):
+    According to the panel assigned to Task Explorer (see config below):
     
     - Panel lhs: it is usually used by Document Explorer. The two tools cannot coexist in the same panel. The last one activated will replace the previous one in the panel. This isn't necessarily a problem, but it's something to be aware of.
     - Panel rhs: the panel can be used to view tasks, filter, query, modify the status and open the original task page but if you want to update the original page, you must open a new session SilverBullet in a secondary window (synthetic panel) via a button on the toolbar.
     - Panel bhs: this panel is not very suitable to mobile. Conversely, on a desk, it provides better visibility of the sometimes long text. But multi-windowing is limited: the panel, docked by default, can become floating but it cannot be docked again; to do this, you will have to close it then reopen it.
 
 The **default panel** assigned to Task Explorer is: ==bhs==.
-To customize this option, copy this text to your Config.md and modify it.
+To customize this option, copy this text to your **Config.md** and modify it.
 
 ```space
 config.set("explorer2", {
@@ -163,7 +164,7 @@ config.set("explorer2", {
               UnifiedAdvancedPanelControl.js (central multi-window script)
               docex_styles.css (css rules for panels and multi-windowing tools)
 
-2) Then, install **Task Explorer**. Download six files from [my Github](https://github.com/Baudogit/silverbullet/tree/main/Task%20Explorer):
+2) Then, install **Task Explorer**. Download eight files from [my Github](https://github.com/Baudogit/silverbullet/tree/main/Task%20Explorer):
 
            TaskExplorer.md (this file)
            lucide-icons.svg (icons)
@@ -171,6 +172,8 @@ config.set("explorer2", {
            Instructions_for_Task_Explorer.md (documents filtering and querying rules)
            where-examples.txt (clauses where examples for sub-menu)
            where-history.txt (clauses where history for sub-menu)
+           12.png (illustration)
+           13.png (illustration)
 
      and put them in your SilverBullet space here: “Library/**baudogit**/“
 
@@ -190,7 +193,7 @@ config.set("explorer2", {
 
 - Document Manager: https://community.silverbullet.md/t/document-explorer-for-silverbullet/3647/159
 - Task Explorer (old version): https://community.silverbullet.md/t/task-explorer/3747/2
-- Task Explorer revisited (this version): ...
+- Task Explorer revisited (this version): https://community.silverbullet.md/t/task-explorer-revisited/3805
 - See also Task Manager: https://community.silverbullet.md/t/todo-task-manager-global-interactive-table-sorter-filtering/3767
 
 ## 🛠️Integration
