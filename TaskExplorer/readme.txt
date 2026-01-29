@@ -5,4 +5,4 @@ Update 2026-01-29:
   - add illustrations and frontmatter
   - better description of some process
 ** TaskExplorer.md
-  - add illustrations in the list of files
+  - list of files: add illustrations
