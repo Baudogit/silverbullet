@@ -2,7 +2,7 @@
 library: Library/baudogit/TaskExplorer
 type: documentation
 subject: how to set up filters and custom where clauses
-maj : 2026-01-29 21:00
+maj : 2026-01-30 09-00
 files:
 - Instructions_for_Task_Explorer.md
 - 12.png

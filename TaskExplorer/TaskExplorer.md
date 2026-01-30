@@ -1,7 +1,7 @@
 ---
 name: Library/baudogit/TaskExplorer
 tags: meta/library
-maj: 2026-01-29 21:00
+maj: 2026-01-30 09-00
 pageDecoration.prefix: "📋 "
 files:
 - TaskExplorer.md
@@ -110,33 +110,33 @@ To hide the drop-down menus, you can press Esc at any time or press X button.
 ## 🪟Multi-windowing
 
 The multi-windowing concept uses two types of components:
-- the **resizable floating panels** are an extension of the fixed panels integrated into SilverBullet These three fixed panels are identified by their position: ==lhs== (left), ==rhs== (right) and ==bhs== (bottom).
-- **autonomous synthetic panels** designed directly in html, potentially in unlimited numbers
+- the **resizable floating** panels are an extension of the fixed panels integrated into SilverBullet These **==three fixed panels==** are identified by their position: ==**lhs**== (left), ==**rhs**== (right) and ==**bhs**== (bottom).
+- **autonomous synthetic** panels designed directly in html, potentially in unlimited numbers
 
-> **note** Note : all these objects are **iframes** but ...
->  - when a markdown page is opened in an “autonomous synthetic panels”, a new SilverBullet **session** is created, as would happen if the page was opened in a new browser tab
->  - although, Document Explorer and Task Explorer don’t generate a new SilverBullet session because they are designed on the fly in strict html associated with js and css.
+> **note** Note : all these objects are **iframes**
+>  - when a markdown page is opened in an “autonomous synthetic” panel, a new SilverBullet **session** is created. There will be as many SilverBullet sessions open as synthetic panels created. An autonomous synthetic panel is equivalent to a new tab.
+>  - Document Explorer and Task Explorer don’t generate a new SilverBullet session. They are designed on the fly in strict html associated with js and css.
 
-Access to these features is **however limited** (as of 01/21/2026):
+Access to features of multi-windowing is **limited** (as of 01/21/2026):
 
 1- the management of the ==rhs== panel by SilverBullet is buggy: as soon as you start to type in the main window, the panel disappears. An issue was opened on 01/15/2026: [Bug: rhs panel is completely removed from the DOM when typing # 1779](https://github.com/silverbulletmd/silverbullet/issues/1779)
 2- management of the ==bhs== panel by Mr.Red's `UnifiedAdvancedPanelControl.js` library is partial (it does not take into account bhs). A complementary development would be appreciated.
 
-⚠️ **Limits**
-Limits appear depending on the panel assigned to Task Explorer (see config below).
-    
-- **==Panel lhs==**: it is usually used by Document Explorer. The two tools cannot coexist in the same panel. The last one activated will replace the previous one in the panel. **This isn't necessarily a problem**, but it's something to be aware of. If you do not use Document Explorer or open it occasionally, it is recommended to use the lhs panel for Task Explorer.
+💡 **Assigning a panel to Task Explorer**
+The default pannel is ==lhs==. You can modify it with `config.set` command, like this :
 
-- **==Panel rhs==**: the panel can be used to view tasks, filter, query, modify the status and open the original task page but if you want to update the original page, you must open a new session SilverBullet in a **secondary window (synthetic panel)** via a button on the toolbar.
-
-- **==Panel bhs==**: this panel is not very suitable to mobile. Conversely, on a desk, it provides better visibility of the sometimes long text. But **multi-windowing is limited**: the panel, docked by default, can become floating but it cannot be docked again; to do this, you will have to close it then reopen it.
-
-The **default panel** assigned to Task Explorer is: ==bhs==.
-To customize this option, copy this text to your **Config.md** and modify it.
-
-```space
+```lua
 config.set("explorer2", { position = "bhs" })
 ```
+_change lua block to space-lua block or copy the line to your config.md_
+
+> **warning** Each panel is unique
+>  If multiple tools use the same panel, the last activated replaces the previous one in the panel. This generally poses no problem but requires double calling to open it (keyboard shortcut | button).
+
+**Advices**:
+- **==lhs==** : the best choice
+- **==rhs==**: you can view tasks, filter, query, modify the status and open the original task page but if you want to update the original page, you must open a new session SilverBullet in a **secondary window (synthetic panel)** via a button on the toolbar.
+- **==bhs==** (not very suitable to mobile). On a desk, better visibility of the sometimes long text. But **multi-windowing is limited**: the panel, docked by default, can become floating but it cannot be docked again; to do this, you will have to close it then reopen it.
 
 ## 🖼️Styling
 
