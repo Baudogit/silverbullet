@@ -2,7 +2,7 @@
 library: Library/baudogit/TaskExplorer
 type: documentation
 subject: how to set up filters and custom where clauses
-maj : 2026-01-29
+maj : 2026-01-29 21:00
 files:
 - Instructions_for_Task_Explorer.md
 - 12.png
@@ -11,8 +11,10 @@ files:
 
 ---
 
+# The input box
+
 ![[Library/baudogit/12.png]]
-The **input box** allows you to define a ==filter== or a ==where clause== depending on the position of the **Filter/Query toggle button**. 
+ ➤ The **input box** allows you to define a ==filter== or a ==where clause== depending on the position of the **Filter/Query toggle button**. 
 
 When the toggle button is activated or after a click in the input area, a ==menu== offers a ==selection of items== to assist you in editing `the filter` or `where clause`.
 
@@ -53,8 +55,8 @@ The syntax is simple but powerful :
   - the desired pattern must start **just after** the [
   - the pattern searched after the [ must match exactly but it **may be incomplete**. So:
     
-        [date:2] will find [date:2026-01-27]
-        but [date:2   ] or [   date:2] will NOT find it
+        [date: 2] will find [date: 2026-01-27]
+        but [date: 2   ] or [   date: 2] will NOT find it
 
 - the **list of all attributes** found in the lines is offered in the filter menu, as an aid to entry. When you click on an attribute item, it is pasted into the pre-formatted input box for searching.
   Example : if you select "attrib1", the pasted string will be:
@@ -63,6 +65,22 @@ The syntax is simple but powerful :
 
 > **note** Attribute-specific search pattern
 >  To be applied, it is necessary that the search string and the target string are between two square brackets. The attribute name is always followed by a ":" followed by a space.
+
+## 🧩 Examples
+
+| N° | Filter | Target |
+|---|----------|----------|
+|01|[attrib1: ][date: ] | Tasks both attributes (attrib1 **AND** date), whatever their position ...|
+|01b|| ... in the text and whatever their value |
+|02|[attrib1: ] [date: ] | Tasks having at least one of the two attributes (attrib1 **OR** date) ...|
+|02b| | ... whatever their value |
+|03|[attrib1: 2015x][date: ] | Tasks both attrib1 **AND** date, whatever their position ... |
+|03b|| ... with attrib1 value is 2015x (where x is any value or string) | 
+|04| "ceci""cela"[attrib1: ]|Tasks having attrib1 **AND** the strings "ceci" **AND** “cela|
+|05|“la page” “red” [date: ]| Tasks with date **OR** "red" **OR** the expression "la page" in the text|
+|06|[attrib]|Tasks for which at least one attribute has the **start of the name** “attrib”|
+|07|[attrib ]|Task having **the string** "[attrib ]" in its text (cannot be an attribute)|
+
 
 ## 📌Extract then refine and filter
 The filter applies to the rows present in the list, whatever their origin: default query when starting the panel, query via a custom `where clause` or refined query with a toolbar button (button “with or without completed tasks” and “button “with or without page break”).
@@ -191,7 +209,7 @@ Commentary on some examples:
 
 | N° | Comment |
 |----------|----------|
-| 03 | For the fun: all the tasks ! |
+| 01 | May be useful: all the tasks ! |
 | 05 | Use a **method** |
 | 06 - 08 - 09 | Use a **function** silverbullet |
 | 10 - 11 - 12 - 13 | Use of “**some()~= nil**” to exclude values not specified. Otherwise, the ...|
@@ -216,3 +234,6 @@ If **no default query** is set, Task Explorer runs a query equivalent to:
 
       query[[from index.tag 'task' order by page, pos]]
 
+---
+
+# 🎦 Scenarios

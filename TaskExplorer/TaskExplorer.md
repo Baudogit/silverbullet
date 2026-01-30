@@ -1,7 +1,7 @@
 ---
 name: Library/baudogit/TaskExplorer
 tags: meta/library
-maj: 2026-01-29
+maj: 2026-01-29 21:00
 pageDecoration.prefix: "📋 "
 files:
 - TaskExplorer.md
@@ -28,6 +28,7 @@ The revisited tool benefits from an ==optimized interface== and ==advanced query
 >    Display the task list according to the user-defined custom rendering, **target tasks according  to various criteria**, reverse their status and navigate to their original page.
 
 Open the **new Task Explorer**: ${widgets.button("Toggle Task Explorer", function() editor.invokeCommand("Navigate: Toggle Task Explorer", tasksByPage()) end)} or Ctrl+Alt+v
+after running the `System: Reload` command if necessary.
 
 To add/hide a button to the SilverBullet toolbar, enable/disable this space-lua:
 ````space-lua
@@ -112,29 +113,29 @@ The multi-windowing concept uses two types of components:
 - the **resizable floating panels** are an extension of the fixed panels integrated into SilverBullet These three fixed panels are identified by their position: ==lhs== (left), ==rhs== (right) and ==bhs== (bottom).
 - **autonomous synthetic panels** designed directly in html, potentially in unlimited numbers
 
-> **note** All these objects are **iframes**.
->  Also, when a markdown page is opened in one of these, a new SilverBullet **session** is created in the browser. Conversely, Document Explorer and Task Explorer don’t generate a new SilverBullet session because they are designed on the fly in strict html associated with js and css.
+> **note** Note : all these objects are **iframes** but ...
+>  - when a markdown page is opened in an “autonomous synthetic panels”, a new SilverBullet **session** is created, as would happen if the page was opened in a new browser tab
+>  - although, Document Explorer and Task Explorer don’t generate a new SilverBullet session because they are designed on the fly in strict html associated with js and css.
 
-Access to these features is **however limited** as of 01/21/2026:
+Access to these features is **however limited** (as of 01/21/2026):
 
 1- the management of the ==rhs== panel by SilverBullet is buggy: as soon as you start to type in the main window, the panel disappears. An issue was opened on 01/15/2026: [Bug: rhs panel is completely removed from the DOM when typing # 1779](https://github.com/silverbulletmd/silverbullet/issues/1779)
-2- management of the ==bhs== panel by Mr.Red's `UnifiedAdvancedPanelControl.js` library is partial. A complementary development would be appreciated.
+2- management of the ==bhs== panel by Mr.Red's `UnifiedAdvancedPanelControl.js` library is partial (it does not take into account bhs). A complementary development would be appreciated.
 
-⚠️ **Consequences / Limits**
-
-    According to the panel assigned to Task Explorer (see config below):
+⚠️ **Limits**
+Limits appear depending on the panel assigned to Task Explorer (see config below).
     
-    - Panel lhs: it is usually used by Document Explorer. The two tools cannot coexist in the same panel. The last one activated will replace the previous one in the panel. This isn't necessarily a problem, but it's something to be aware of.
-    - Panel rhs: the panel can be used to view tasks, filter, query, modify the status and open the original task page but if you want to update the original page, you must open a new session SilverBullet in a secondary window (synthetic panel) via a button on the toolbar.
-    - Panel bhs: this panel is not very suitable to mobile. Conversely, on a desk, it provides better visibility of the sometimes long text. But multi-windowing is limited: the panel, docked by default, can become floating but it cannot be docked again; to do this, you will have to close it then reopen it.
+- **==Panel lhs==**: it is usually used by Document Explorer. The two tools cannot coexist in the same panel. The last one activated will replace the previous one in the panel. **This isn't necessarily a problem**, but it's something to be aware of. If you do not use Document Explorer or open it occasionally, it is recommended to use the lhs panel for Task Explorer.
+
+- **==Panel rhs==**: the panel can be used to view tasks, filter, query, modify the status and open the original task page but if you want to update the original page, you must open a new session SilverBullet in a **secondary window (synthetic panel)** via a button on the toolbar.
+
+- **==Panel bhs==**: this panel is not very suitable to mobile. Conversely, on a desk, it provides better visibility of the sometimes long text. But **multi-windowing is limited**: the panel, docked by default, can become floating but it cannot be docked again; to do this, you will have to close it then reopen it.
 
 The **default panel** assigned to Task Explorer is: ==bhs==.
 To customize this option, copy this text to your **Config.md** and modify it.
 
 ```space
-config.set("explorer2", {
-  position = "bhs",
-})
+config.set("explorer2", { position = "bhs" })
 ```
 
 ## 🖼️Styling
@@ -144,7 +145,7 @@ config.set("explorer2", {
 
 - The **panel style** is managed by Mr.Red's `docex_styles.css`, the last section of which (11. MAIN UI (Colors)) can be customized in a `space-style` (see the Document Explorer presentation).
   
-      ⚠️ docex_styles.css is loaded when the panel is opened. Many of rules in `docex_styles.css` refer to css variables through css variables defined in `main.css`.
+      ⚠️ docex_styles.css is loaded when the panel is opened. Many of rules in `docex_styles.css` refer to css variables through css variables defined in main.css, which is reloaded/reactivated just before loading docex_styles.css.
 
       So, if you want to change the default color of the panel background (like me !), modify directly the variable css in your space-style (section: html[data-theme="dark"] or: html[data-theme="light"]) like this;  "--top-background-color: white;“
 
