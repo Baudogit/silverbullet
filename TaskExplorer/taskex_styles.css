@@ -1,0 +1,525 @@
+/* ====== 1. VARIABLES & BASE STYLES ====== */
+
+:root {
+    font-family:
+        var(--ui-font), Monaco, Menlo, Consolas, "Courier New", Courier,
+        monospace;
+}
+
+/* ====== 2. LAYOUT CONTAINER ====== */
+
+.explorer-panel {
+    display: flex;
+    color: var(--explorer-text-color);
+    background: var(--explorer-bg-color);
+    flex-direction: column;
+    height: 100vh;
+    width: 100%;
+    overflow: hidden;
+    box-sizing: border-box;
+    position: fixed;
+    top: 0;
+    left: 0;
+}
+
+.document-explorer {
+    box-sizing: border-box;
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    width: 100%;
+    min-height: 0;
+    padding: 0.5em;
+    gap: 8px;
+    align-content: start;
+    scroll-behavior: smooth;
+    /*  scrollbar-width: thin; */
+}
+
+/* ======3. HEADER & NAVIGATION ====== */
+
+.explorer-header {
+    flex: 0 0 auto;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    border-right: 1px solid var(--explorer-border-color);
+    border-left: 1px solid var(--explorer-border-color);
+    box-shadow: 0px 2px 6px 0 oklch(0 0 0 / 0.3);
+}
+
+/* --- Tool Bar --- */
+.explorer-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 6px 8px 3px 8px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.input-wrapper {
+    position: relative;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    min-width: 24px;
+    width: 64px;
+    flex-grow: 0;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.input-wrapper:focus-within {
+    flex-grow: 1;
+    box-shadow: 0px 2px 6px 0 oklch(0 0 0 / 0.3);
+}
+
+.explorer-toolbar input {
+    height: 100%;
+    width: 100%;
+    padding: 4px 22px 4px 4px;
+    border-radius: 6px;
+    border: none;
+    outline: 1px solid var(--explorer-border-color);
+    color: inherit;
+    font-size: 0.95em;
+    box-sizing: border-box;
+    cursor: pointer;
+    background: var(--explorer-tile-bg);
+}
+
+.explorer-toolbar input:hover {
+    background: var(--explorer-hover-bg);
+}
+.explorer-toolbar input:focus {
+    cursor: text;
+    outline: 1px solid var(--explorer-border-color);
+    box-sizing: border-box;
+}
+
+.clear-btn {
+    position: absolute;
+    right: 4px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 14px;
+    height: 14px;
+    background: var(--explorer-hover-bg);
+    border-radius: 50%;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    cursor: pointer;
+}
+
+/* --- View Switcher --- */
+.view-switcher {
+    display: flex;
+    background: oklch(0.75 0 0 / 0.1);
+    padding: 3px;
+    border-radius: 8px;
+    border: 1px solid var(--explorer-border-color);
+}
+
+.view-switcher div {
+    display: flex;
+    background: transparent;
+    border: none;
+    padding: 2px 6px;
+    cursor: pointer;
+    border-radius: 6px;
+    justify-content: center;
+    align-items: center;
+    font-size: 1em;
+    color: inherit;
+    opacity: 0.6;
+}
+
+.view-switcher div:hover {
+    opacity: 1;
+    background: var(--explorer-hover-bg);
+}
+
+.view-switcher div.active {
+    background: oklch(from var(--explorer-accent-color) l c h);
+    color: var(--explorer-text-color);
+    opacity: 1;
+}
+
+.view-switcher div svg {
+    stroke: var(--explorer-text-color);
+}
+.view-switcher div.active svg {
+    stroke: var(--explorer-accent-text);
+}
+
+/* --- Action Buttons --- */
+.explorer-button-group {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    background: var(--explorer-tile-bg);
+    border-radius: 6px;
+    padding: 2px;
+}
+
+.explorer-action-btn,
+.explorer-close-btn {
+    flex-shrink: 0;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--explorer-tile-bg);
+    border: 1px solid var(--explorer-border-color);
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.explorer-action-btn {
+    font-size: 1.1em;
+}
+.explorer-action-btn:hover {
+    background: var(--explorer-hover-bg);
+}
+.explorer-close-btn:hover {
+    background: oklch(0.65 0.2 30);
+}
+.explorer-close-btn svg:hover {
+    stroke: white;
+}
+
+.explorer-action-btn.active {
+    background: oklch(from var(--explorer-accent-color) l c h);
+}
+.explorer-action-btn.active svg {
+    stroke: var(--explorer-accent-text);
+}
+
+#tree-toggle-btn:hover,
+#filter-btn:hover {
+    background: var(--explorer-hover-bg) !important;
+}
+
+/* Instant Negative Filter Toggle*/
+.document-explorer.hide-filtered .filtered-item {
+    display: none !important;
+}
+
+/* Optional: Smooth the transition when toggling*/
+.grid-tile {
+    transition: opacity 0.15s ease-in-out;
+}
+
+#tree-toggle-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+}
+
+/* Button: open view mode */
+.blue-icon {
+    color: blue;
+}
+.green-icon {
+    color: #00d836;
+}
+#openingMode-btn.explorer-action-btn.active {
+    background: var(--explorer-tile-bg);
+}
+
+/* --- Buttons: mode Switcher --- */
+#searchInfo {
+    padding-left: 5px;
+    padding-right: 8px;
+    justify-content: center;
+}
+.mode-switcher {
+    display: flex;
+    background: oklch(0.75 0 0 / 0.1);
+    padding: 1px; /* 3 */
+    border-radius: 8px;
+    border: 1px solid var(--explorer-border-color);
+}
+.mode-switcher div {
+    display: flex;
+    background: transparent;
+    border: none;
+    padding: 2px 6px;
+    cursor: pointer;
+    border-radius: 6px;
+    justify-content: center;
+    align-items: center;
+    font-size: 0.9em;
+    color: inherit;
+    opacity: 0.6;
+}
+.mode-switcher div:hover {
+    opacity: 1;
+    background: var(--explorer-hover-bg);
+}
+.mode-switcher div.active {
+    background: oklch(from var(--explorer-accent-color) l c h);
+    color: white;
+    opacity: 1;
+}
+/* Transition for hide when input focus */
+.mode-switcher {
+    max-width: 200px;
+    opacity: 1;
+    display: flex;
+    transition:
+        max-width 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+        opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+        padding-inline 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* --------- Hide Action Buttons when Filter in focus ------------- */
+
+/* When input focus */
+.input-wrapper:focus-within ~ .mode-switcher {
+    max-width: 0;
+    opacity: 0;
+    padding-inline: 0;
+    pointer-events: none;
+}
+
+.view-switcher,
+.explorer-button-group,
+.action-buttons .explorer-action-btn {
+    max-width: 200px;
+    opacity: 1;
+    display: flex;
+    transition:
+        max-width 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+        opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+        padding-inline 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.input-wrapper:focus-within ~ .view-switcher,
+.input-wrapper:focus-within ~ .explorer-button-group,
+.input-wrapper:focus-within ~ .action-buttons > .explorer-action-btn {
+    max-width: 0;
+    opacity: 0;
+    padding-inline: 0;
+    pointer-events: none;
+}
+
+.input-wrapper {
+    transition:
+        flex-grow 0.6s cubic-bezier(0.4, 0, 0.2, 1),
+        width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.input-wrapper:focus-within {
+    flex-grow: 1;
+}
+.explorer-toolbar {
+    transition: gap 0.4s ease;
+}
+
+.explorer-toolbar:focus-within {
+    gap: 0px;
+    transition: gap 0.4s ease;
+}
+
+/* --- Breadcrumbs2 --- */
+.explorer-breadcrumbs2 {
+    padding: 3px 0px 0px 15px;
+    color: blue;
+    display: flex;
+    justify-content: space-between;
+}
+#temp-message1,
+#temp-message2 {
+    color: grey;
+    text-align: center;
+    display: none;
+    font-style: italic;
+}
+#temp-message3 {
+    color: grey;
+    text-align: right;
+    padding-right: 15px;
+    display: inline;
+    font-style: italic;
+}
+
+/* ********* LIST ***********/
+.document-explorer {
+    border-top: 1px solid #c0c0c0;
+    border-left: 1px solid #c0c0c0;
+    border-right: 1px solid #c0c0c0;
+    padding: 0px;
+}
+
+/* ====== 4. SHARED TILE COMPONENTS (Icon, Title, Thumbnails) ====== */
+
+/*
+.grid-tile {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border-radius: 8px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    color: var(--explorer-text-color);
+    user-select: none;
+}
+
+.grid-tile.is-focused {
+    outline: 2px solid var(--explorer-accent-text);
+    outline-offset: -2px;
+    background: oklch(0.75 0 0 / 0.15);
+}
+
+.hybrid-virtual-entry .grid-tile:hover,
+.grid-tile:hover {
+    background: var(--explorer-hover-bg);
+}
+
+.grid-tile.is-dragging {
+    outline: 3px dotted var(--explorer-accent-color) !important;
+    outline-offset: 3px;
+    z-index: 100;
+}
+
+.grid-title {
+    height: calc(var(--tile-size) * 0.3);
+    text-align: center;
+    font-size: clamp(0.6em, calc((var(--tile-size) / 80px) * 0.8em), 1em);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    pointer-events: none;
+    box-sizing: border-box;
+}
+
+.icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: calc((var(--tile-size) / 80px) * 3em);
+    height: calc(var(--tile-size) * 0.7);
+    pointer-events: none;
+    box-sizing: border-box;
+}
+
+.tile-thumb {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    object-fit: cover;
+    border-radius: 4px;
+    pointer-events: none;
+}
+*/
+
+/* Page Name */
+.sb-TaskExplorer-div-page {
+    color: blue;
+    text-align: right;
+    font-weight: bold;
+    box-sizing: border-box;
+    outline: 1px solid #c0c0c0;
+    padding-right: 20px;
+    padding-top: 3px;
+    padding-bottom: 3px;
+}
+
+/* Wrapper (DIV) of the task */
+.sb-TaskExplorer-div-task {
+    margin-bottom: 0px;
+    padding: 3px 15px;
+    display: flex;
+    gap: 8px; /* 8 */
+    width: 100%;
+    box-sizing: border-box;
+}
+.sb-TaskExplorer-div-task:hover {
+    background-color: gold;
+}
+.sb-TaskExplorer-div-task {
+    outline: 1px solid #c0c0c0;
+}
+
+/* Wrapper (SPAN) of the task */
+.sb-TaskExplorer-span-task {
+    display: flex;
+    gap: 8px;
+    width: 100%;
+    align-items: flex-start;
+    box-sizing: border-box;
+}
+
+/* Wrapper (DIV child) of the task */
+#divTaskchild {
+    flex: 1;
+    cursor: pointer;
+    vertical-align: top;
+    box-sizing: border-box;
+    line-height: 1.4;
+    position: relative;
+}
+
+/* ====== 10. ICONS  ====== */
+
+.action-buttons svg {
+    max-height: 24px;
+    max-width: 24px;
+}
+.explorer-panel svg {
+    stroke: var(--explorer-text-color);
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 2px;
+    fill: none;
+}
+
+.view-switcher div svg,
+.explorer-action-btn svg {
+    width: 16px;
+    height: 16px;
+}
+
+/* ====== 11. MAIN UI (Colors) ====== */
+
+html[data-theme="dark"] {
+    /*Main UI Color*/
+    --explorer-bg-color: var(--top-background-color);
+    --explorer-text-color: var(--root-color, white);
+    --explorer-accent-color: var(--ui-accent-color, oklch(55% 0.15 250));
+    --explorer-accent-text: var(--ui-accent-contrast-color);
+    --breadcrumb-color: var(--editor-wiki-link-page-color);
+    --explorer-border-color: oklch(
+        from var(--modal-border-color) 0.65 c h / 0.5
+    );
+    --explorer-hover-bg: oklch(0.65 0 0 / 0.5);
+    --explorer-tile-bg: oklch(0.75 0 0 / 0.1);
+}
+
+html[data-theme="light"] {
+    /*Main UI Color*/
+
+    --top-background-color: white; /* main UI */
+
+    --explorer-bg-color: var(--top-background-color);
+    --explorer-text-color: var(--root-color, black);
+    --explorer-accent-color: var(--ui-accent-color, oklch(55% 0.15 250));
+    --explorer-accent-text: var(--ui-accent-contrast-color);
+    --breadcrumb-color: var(--editor-wiki-link-page-color);
+    --explorer-border-color: oklch(
+        from var(--modal-border-color) 0.5 c h / 0.5
+    );
+    --explorer-hover-bg: oklch(0.75 0 0 / 0.5);
+    --explorer-tile-bg: oklch(0.75 0 0 / 0.1);
+
+    --progress-mon-type-color: #00e439; /* indicateur de progression */
+}

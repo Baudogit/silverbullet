@@ -1,39 +1,19 @@
-```space-style
+
+```space
 
 html[data-theme="light"] {
-    /*Main UI Color*/
     --top-background-color: white;
+    --progress-mon-type-color: #00E439;
+}
+
+/* en-tête d'iframe */
+.explorer-header {
+  border-top: 1px solid var(--explorer-border-color);
+  border-left: 1px solid var(--explorer-border-color);
+  border-right: 1px solid var(--explorer-border-color);
 }
 
 /* ********* TOOLBAR **********
-
-/* Buttons: inside the search area*/
-#clearSearch,
-#goSearch {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 14px;
-    height: 14px;
-    background: var(--explorer-hover-bg);
-    border-radius: 50%;
-    display: none;
-    align-items: center;
-    justify-content: center;
-    font-size: 10px;
-    cursor: pointer;
-}
-#clearSearch {
-    right: 25px;
-}
-#goSearch {
-    right: 5px;
-    color: red;
-}
-.input-wrapper:focus-within #clearSearch,
-.input-wrapper:focus-within #goSearch {
-    display: inline;
-}
 
 /* --- Buttons: mode Switcher --- */
 #searchInfo {
@@ -44,7 +24,7 @@ html[data-theme="light"] {
 .mode-switcher {
     display: flex;
     background: oklch(0.75 0 0 / 0.1);
-    padding: 1px; /* 3 */
+    padding: 1px;
     border-radius: 8px;
     border: 1px solid var(--explorer-border-color);
 }
@@ -70,7 +50,7 @@ html[data-theme="light"] {
     color: white;
     opacity: 1;
 }
-/* --------- Hide mode switcher buttons when Filter in focus ------------- */
+/* Transition for hide when input focus */
 .mode-switcher {
     max-width: 200px;
     opacity: 1;
@@ -80,6 +60,7 @@ html[data-theme="light"] {
         opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1),
         padding-inline 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
+/* When input focus */
 .input-wrapper:focus-within ~ .mode-switcher{
     max-width: 0;
     opacity: 0;
@@ -99,6 +80,7 @@ html[data-theme="light"] {
   display: flex;
   justify-content: space-between;
 }
+
 #temp-message1, #temp-message2 {
   color: grey;
   text-align: center;
@@ -113,23 +95,31 @@ html[data-theme="light"] {
   font-style: italic;
 }
 
-/* ********* LIST FORMAT **********
+/* ********* LIST ***********/
+.document-explorer{
+  border-top: 1px solid #C0C0C0;
+  border-left: 1px solid #C0C0C0;
+  border-right: 1px solid #C0C0C0;
+  padding: 0px;
+}
 
 /* Grille */
-.mode-grid .document-explorer2 {
+/*.document-explorer2 {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(var(--tile-size), 1fr));
   grid-auto-rows: 3 * var(--tile-size);
-}
+}*/
 
 /* Page Name */
 .sb-TaskExplorer-div-page{
   color: blue;
   text-align: right;
-  margin-top: 5px;
-  margin-right: 15px;
-  margin-bottom: 5px;
   font-weight: bold;
+  box-sizing: border-box;
+  outline: 1px solid #C0C0C0;
+  padding-right: 20px;
+  padding-top: 3px;
+  padding-bottom: 3px;
 }
 .sb-TaskExplorer-span-page{
   padding-left: 25px;
@@ -138,9 +128,9 @@ html[data-theme="light"] {
 /* Wrapper (DIV) of the task */
 .sb-TaskExplorer-div-task {
   margin-bottom: 0px;
-  padding: 0px 10px;
+  padding: 3px 15px;
   display: flex;
-  gap: 8px;  /* 8 */
+  gap: 8px;
   width: 100%;
   box-sizing: border-box;
 }
@@ -168,65 +158,6 @@ html[data-theme="light"] {
   box-sizing: border-box;
   line-height: 1.4;
   position: relative;
-}
-
-/* ********* TASK FORMAT **********
-  for SilverBullet AND TaskExplorer  
-  <<<<<<<< examples >>>>>>>>> */
-
-/* Values*/
-.sb-attribute[data-statut] > .sb-list.sb-frontmatter:not(.sb-meta):not(.sb-atom) {
-  background-color: red;
-  color: white;
-}
-.sb-attribute[data-attrib1] > .sb-list.sb-frontmatter:not(.sb-meta):not(.sb-atom) {
-  color:#800080;
-  background-color: #C8A7D3;
-}
-.sb-attribute[data-attrib2] > .sb-list.sb-frontmatter:not(.sb-meta):not(.sb-atom) {
-  color: green;
-}
-.sb-attribute[data-attrib2] {
-  background-color: #C4FFC4;
-}
-.sb-attribute[data-date] > .sb-list.sb-frontmatter:not(.sb-meta):not(.sb-atom) {
-  color: blue;
-}
-
-/* Structure */
-.sb-attribute> .sb-list.sb-frontmatter.sb-meta {
-    display: none;
-}
-.sb-attribute> .sb-list.sb-frontmatter.sb-meta:is(:has(+ .sb-frontmatter:not(.sb-meta):not(.sb-atom))) {
-    display: inline;
-}
-.sb-attribute[data-date]> .sb-list.sb-frontmatter.sb-meta:is(:has(+ .sb-frontmatter:not(.sb-meta):not(.sb-atom))) {
-    display: none;
-}
-.sb-attribute[data-date] > .sb-list.sb-frontmatter.sb-atom {
-    display: none;
-}
-
-/* Attribute */
-/*.sb-frontmatter[data-date="statut"][data-attr-value="hors délai"] {
-      background-color: red !important;
-      color: white !important;
-      padding: 2px 6px !important;
-      border-radius: 3px !important;
-}*/
-
-/* Task checked : remove line-through */
-#sb-main .cm-editor .cm-task-checked {
-    text-decoration: none !important;
-    font-weight: normal;
-}
-
-/* Task checked : change background and character display */
-.cm-task-checked, .cm-task-checked .sb-frontmatter {
-      background: #F0F0F0 !important;
-      font-weight: normal;
-      color:grey !important;
-      box-sizing: border-box;
 }
 
 /* for DEBUG */

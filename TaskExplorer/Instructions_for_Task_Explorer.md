@@ -1,36 +1,30 @@
 ---
-library: Library/baudogit/TaskExplorer
-type: documentation
-subject: how to set up filters and custom where clauses
-maj : 2026-01-30 09-00
+library: "Library/baudogit/TaskExplorer"
+type: "documentation"
+subject: "How to set up filters and custom where clauses"
 files:
 - Instructions_for_Task_Explorer.md
-- 12.png
-- 13.png
+maj : 2026-02-10 08-00
 ---
 
 ---
 
-# The input box
+# The input action box
 
-![[Library/baudogit/12.png]]
- ➤ The **input box** allows you to define a ==filter== or a ==where clause== depending on the position of the **Filter/Query toggle button**. 
+To access the actions, please **click on the input box**. There are three types of actions :
 
-When the toggle button is activated or after a click in the input area, a ==menu== offers a ==selection of items== to assist you in editing `the filter` or `where clause`.
-
-![[Library/baudogit/13.png]]
-These menus can be hidden by clicking **Esc**.
+![actions|500px](https://raw.githubusercontent.com/Baudogit/silverbullet/refs/heads/main/screenshots/actions.png)
+These menus can be hidden by pressing **Esc** or click out of the input.
 To make them appear again without leaving the input area, **right-click**.
-The methods for editing and executing the filter and the where clause are presented below.
 
 ---
 
 # ⏬Filter the list
 
-## 🎯Purpose
+## Purpose
   ➤ ==Filter the lines of the current list.==
 
-## 📖 Procedure
+## Procedure
 - the filter is active from the first character entered
 - the filter is **updated as characters are entered**
 - the filter remains active until:
@@ -41,11 +35,9 @@ The methods for editing and executing the filter and the where clause are presen
 - the filter applies to the content of each line
 - the target content is the **raw text** of the task, before applying css rules
 - thus, even if the attributes are stripped of their structure ([, ] and :), or if the name of the attribute is not displayed on the line, it can still be searched
-- the raw text of the task is displayed in the **tooltip** of each line
-    
-   ➤ The active filter is displayed **in the tooltip** of the toggle button (Filter).
+- reminder: the raw text of the task is displayed in the **tooltip** of each line
 
-## 💡Syntaxe
+## 💡Syntax
 The syntax is simple but powerful :
 - **no difference** between upper and lower case
 - groups of letters separated by one or more spaces are **connected by OR**
@@ -63,38 +55,34 @@ The syntax is simple but powerful :
   
         [attrib1: ]
 
-> **note** Attribute-specific search pattern
->  To be applied, it is necessary that the search string and the target string are between two square brackets. The attribute name is always followed by a ":" followed by a space.
+> **note** Search pattern for attribute
+>  To be applied, it is necessary that the search string and the target string are between two square brackets. The attribute name is always followed by a ":".
 
-## 🧩 Examples
+## Examples
 
 | N° | Filter | Target |
 |---|----------|----------|
-|01|[attrib1: ][date: ] | Tasks both attributes (attrib1 **AND** date), whatever their position ...|
+|01|\[attrib1: ]\[date: ] | Tasks both attributes (attrib1 **AND** date), whatever their position ...|
 |01b|| ... in the text and whatever their value |
-|02|[attrib1: ] [date: ] | Tasks having at least one of the two attributes (attrib1 **OR** date) ...|
+|02|\[attrib1: ] \[date: ] | Tasks having at least one of the two attributes (attrib1 **OR** date) ...|
 |02b| | ... whatever their value |
-|03|[attrib1: 2015x][date: ] | Tasks both attrib1 **AND** date, whatever their position ... |
+|03|\[attrib1: 2015x]\[date: ] | Tasks both attrib1 **AND** date, whatever their position ... |
 |03b|| ... with attrib1 value is 2015x (where x is any value or string) | 
-|04| "ceci""cela"[attrib1: ]|Tasks having attrib1 **AND** the strings "ceci" **AND** “cela|
-|05|“la page” “red” [date: ]| Tasks with date **OR** "red" **OR** the expression "la page" in the text|
-|06|[attrib]|Tasks for which at least one attribute has the **start of the name** “attrib”|
-|07|[attrib ]|Task having **the string** "[attrib ]" in its text (cannot be an attribute)|
+|04| "ceci""cela"\[attrib1: ]|Tasks having attrib1 **AND** the strings "ceci" **AND** “cela|
+|05|“la page” “red” \[date: ]| Tasks with date **OR** "red" **OR** the expression "la page" in the text|
+|06|\[attrib ]|Tasks for which at least one attribute has the **start of the name** “attrib”|
+|07|\[attrib ]|Task having **the string** "\[attrib ]" in its text (cannot be an attribute)|
 
-
-## 📌Extract then refine and filter
-The filter applies to the rows present in the list, whatever their origin: default query when starting the panel, query via a custom `where clause` or refined query with a toolbar button (button “with or without completed tasks” and “button “with or without page break”).
-
-So, you can **extract a list** with custom `where clause` (see below), then **refine and filter it**.
+➤ You can generate a list with a custom query (default query when starting the panel, query via a custom `where clause`) then, refined it with a toolbar button (“with or without completed tasks” | “with or without page break”) then, filter it.
 
 ---
 
 # 🔀Query the index
 
-## 🎯Purpose
-  ➤ ==Generate a new list with a custom query.==
+## Purpose
+  ➤ ==Generate a new list with a custom where clause==
 
-## 🪄 Technical concepts
+## Technical concepts
 Rather than using the usual syntax to execute a query, it’s possible to **directly call** the `index.queryLuaObjects` function associated with `lua.parseExpression`. This will allow you to **program the where clause** and, if necessary, pass **variables** as parameters. The result can then be processed with `js.tolua`.
 
 The syntax for queryLuaObjects function is:
@@ -146,10 +134,10 @@ These fields accept `LuaExpression` which can be created with `lua.parseExpressi
 
 `scopedVariables` are not used in Task Explorer. On the other hand, **custom queries** use the above concepts/tools. Assistance in editing wheres clauses is offered, via **lists of items** (==properties==, ==attributes==) and pre-designed where clauses (==examples== and ==history==).
 
-## 📖 Procedure
+## 💡Syntax
+Please use the edit box to write the custom `where clause`.
+**Do not add** the keyword "where". It will be added when the query is executed.
 
-- the edit box allows you to write the custom `where clause`
-- **do not add** the keyword "where". It will be added when the query is executed.
 - objectVariable are designated by their **default name**, i.e. '_'
 - character strings are entered in **single quotes**
 - the logical operators are: **not, and, or**. The relational operators are: **==, <, >, <=, >=, ~=**
@@ -164,27 +152,24 @@ These fields accept `LuaExpression` which can be created with `lua.parseExpressi
 
         _.completed==' ' and _.itags==' '
 
-  ③ the ==**list of example where clauses**== taken from the `where-examples.txt` file. This file is freely editable to add your favorites, if necessary. It currently has 20 examples.
+  ③ the ==**list of history where clauses**== taken from the `where-history.txt` file. After execution, each query is logged in this file, without duplicates, and within the limit of the maximum number of lines indicated in your configuration file or 25 (default). This file is freely editable, subject to respecting the syntax identical to that of the file `where-examples.txt`.
+  
+  ④ the ==**list of example where clauses**== taken from the `where-examples.txt` file. This file is freely editable to add your favorites, if necessary. It currently has 20 examples.
  
 > **note** Editing `where-examples.txt`. 
 >  Please respect the syntax : 5 characters before the start of the clause; all surrounded by double quotation marks and ended with a comma. Example: "01 | _.done == true",
 
-  ④ the ==**list of history where clauses**== taken from the `where-history.txt` file. After execution, each query is logged in this file, without duplicates, and within the limit of the maximum number of lines indicated in your configuration file or 20 (default). This file is freely editable, subject to respecting the syntax identical to that of the file `where-examples.txt`.
+  ➤ When editing the where clause is completed, **clic on Enter** to execute the query.
 
-> **note** Execute the query
->    When editing the where clause is completed, **clic on Enter** to execute the query.
+## Examples
 
-- The last `where clause` used is displayed **in the tooltip** of the toggle button (Query).
-
-## 🧩 Examples
-
-The 20 lines are extracted of the `where-examples.txt` file (as of 2026-01-27):
+The 20 lines are extracted of the `where-examples.txt` file (as of 2026-02-10):
 
 ````yaml
 
-01 | _.done == true, 
-02 | _.done == false, 
-03 | _.done == not true or _.done == true,
+01 | _.done == not true or _.done == true,
+02 | _.done == true, 
+03 | _.done == false, 
 04 | _.name== 'TODO', 
 05 | _.name:startsWith('TODO'), 
 06 | _.page.match('^TECH'), 
@@ -222,14 +207,9 @@ Commentary on some examples:
 | 14 | **table.includes**() to search for a channel in a table or a collection  |
 | 16 |**rawget**() accesses a table index without invoking metamethods (ex: itags). |
 | 17 | **select**(#, table.unpack( ... applies the function to each value, before checking the test |
-| 18 | frankly, a **function in the where**! |
+| 18 | frankly, a **function directly in the where**! |
 
-## 📌Default query
-
-A ==**default query**== can be defined to limit the query scope when Task Explorer is launched. If one exists (in the configuration file), it will be systematically executed during a **new SilverBullet session**. It is possible to indicate that this request will also be systematically executed at each reset **via the Reset button**.
-
-This query will be **logged during its execution**, so that it is easy to recall it during the session (within the number of lines in the history).
-
+ ➤ A ==**default query**== can be defined to limit the query scope when Task Explorer is launched and it can be systematically executed at each reset (see options in configuration file).
 If **no default query** is set, Task Explorer runs a query equivalent to:
 
       query[[from index.tag 'task' order by page, pos]]
@@ -237,3 +217,4 @@ If **no default query** is set, Task Explorer runs a query equivalent to:
 ---
 
 # 🎦 Scenarios
+...

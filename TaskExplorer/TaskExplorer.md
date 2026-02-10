@@ -1,38 +1,36 @@
 ---
-name: Library/baudogit/TaskExplorer
+name: "Library/baudogit/TaskExplorer"
 tags: meta/library
-maj: 2026-01-30 09-00
-pageDecoration.prefix: "📋 "
 files:
 - TaskExplorer.md
-- lucide-icons.svg
-- ConfigStyles_for_TaskExplorer.md
 - Instructions_for_Task_Explorer.md
+- ConfigStyles_for_TaskExplorer.md
+- taskex_styles.css
+- lucide-icons.svg
 - where-examples.txt
 - where-history.txt
-- 12.png (for Instructions_for_Task_Explorer.md)
-- 13.png (for Instructions_for_Task_Explorer.md)
+pageDecoration.prefix: "📋 "
 share.uri: "github:Baudogit/silverbullet/tree/main/TaskExplorer"
+maj: 2026-02-10 08-00
 ---
 
-> **note** Screenshots are available on the dedicated discussion thread of the SilverBullet community
->      The best solution: install and test !
+# 📋Task Explorer
 
----
+Task Explorer **display your task list** with your css rules.
+The content of task is fully visualized **in styled mode** and **in raw mode**.
+You can **extract** a list with custom queries and **filter** it according to many criteria.
 
-# 📋Task Explorer (revisited)
+The status of a task can be directly **modified** in the list or after **navigating** to its original page. 
+You can **update the attributes** of the tasks in the list with **batch processing** (add, delete and rename).
 
-The revisited tool benefits from an ==optimized interface== and ==advanced querying functionalities==.
+![TE|400px](https://raw.githubusercontent.com/Baudogit/silverbullet/refs/heads/main/screenshots/TE.png)
+Input actions:
+![actions|500px](https://raw.githubusercontent.com/Baudogit/silverbullet/refs/heads/main/screenshots/actions.png)
+Run `System: Reload` command then **open Task Explorer** with ${widgets.button("Toggle Task Explorer", function() editor.invokeCommand("Navigate: Toggle Task Explorer", tasksByPage()) end)} Ctrl+Alt+v or
+the icon “list” button added to your SilverBullet toolbar by this space-lua:
 
-> **success** **What’s the goal ?**
->    Display the task list according to the user-defined custom rendering, **target tasks according  to various criteria**, reverse their status and navigate to their original page.
-
-Open the **new Task Explorer**: ${widgets.button("Toggle Task Explorer", function() editor.invokeCommand("Navigate: Toggle Task Explorer", tasksByPage()) end)} or Ctrl+Alt+v
-after running the `System: Reload` command if necessary.
-
-To add/hide a button to the SilverBullet toolbar, enable/disable this space-lua:
 ````space-lua
--- Show/hide Task Explorer
+-- If you don't want the button in your toolbar, rename this space-lua in lua
 actionButton.define {
   icon = "list",
   description = "Task Explorer",
@@ -43,238 +41,255 @@ actionButton.define {
 }
 ````
 
-> **warning** Warning
->      Depending on the panel chosen (see below), it may be necessary to click the button twice.
->     To avoid this, preferably use the command or the button above to **close** the panel.
+
+> **warning** Opening Task Explorer
+>  It may be necessary to click the button twice. It depends on how the panel was previously closed by another plugin or by Task Explorer. With Task Explorer, **close** the plugin with toggle command, toggle button or with the X of Task Explorer (but not with the X of multi-windowing system).
 
 ---
 
 # Features
 
-> **note** Note 
->      Task Explorer uses multi-windowing functionalities developed by Mr.Red.
+## List view 
 
-## ✨List view 
+- Each task is displayed on several lines and a tooltip:
+    - On the first lines: ==text== of the task, without the attributes. Split text, broken down between attributes, is concatenated with "|" separator.
+    - On the following lines, as many as necessary: ==attributes==
+    - On a **tooltip**: ==raw text== (without CSS rules), ==reference== and ==itags==
+- Each task is formatted according to the **CSS rules** applied in markdown pages.
+- Navigate to the **original task page** with a click on a line.
+- Open the original page depending on the option selected with a button on the toolbar:
+    - in the main editor window
+    - or in a separate window, if you have installed multi-windowing system
 
-- displays the list of tasks
-- every task is displayed on **several lines**:  
-  - first, the ==text== of the task, without the attributes. Split text, broken down between attributes, is concatenated with "|" separator. Text can span multiple lines.
-  - then, the ==attributes== only, on as many lines as necessary
-- applies the **css rules** used in markdown pages
-- show a **tooltip** with the original text of the task (in its raw version without CSS rules) increased by one line for **itags**
-- open the **original task page** in the main editor window
-  OR in a separate window integrated into the multi-windowed environment
+## Manipulations
 
-## ✨Task update
+- ==Page break== can be added or removed via a button in the toolbar
+- ==Completed tasks== can be added or removed via a button in the toolbar
+- List can be ==resetted== via a button in the toolbar
 
-- ==modify the status== of task with synchronized report in the original window and in the index
-  OR in a window opened parallel to the panel (in this case, the update is not reported in the panel and you have to refresh it manually with a button).
-- **custom statuses** are displayed but cannot be updated via Task Explorer. To do this, you must navigate to the original page and update manually.
+> **success** Starting and Resetting
+>   You can define a startup query and run it (or not), again, during a reset (cf below “Configuration”)
 
-## ✨List manipulations
+## Task update
 
-- tasks are sorted by page and by position on their page. A **page break** is applied in the list. The ==page break== can be removed (and then reinstated) via a button.
-- the list comes from an extraction of the index which **may or may not include completed tasks** (==toggle== button)
-- the list can be regenerated at any time, without `where` restriction in the extraction and without display filter (==reset== button)
-
-## ✨Filter and query
-
-The list can be targeted in two modes:
-- ==filter mode== : the list is filtered without re-extracting
-- ==where mode== : the list is re-extracted after applying complex filters via a **custom** where clause
+- ==Change the status== of a task directly in the list or, if you prefer, on the original page after navigating.
   
-To activate these features, use the **Filter/Query toggle button** or click directly in the input box. Filter mode is selected by default. When the Filter/Query toggle button is activated, the input area has the focus and a list of items is proposed in a menu.
+> **warning** Custom statuses
+>   They are displayed but cannot be updated via Task Explorer. To do this, you must navigate to the original page and update it manually.
 
- Menu content depends on the mode chosen:
-- for both modes: ==list of attributes== collected in the current list
-- for where mode only (in addition): ==list of standard properties== of a task defined in the index
-- for where mode only (in addition): ==library of where clauses examples==
-- for where mode only (in addition): ==library of where clauses history==
-A click on one of these items transfers its content to the input area.
+- ==Batch processing== to add, delete or rename an attribute on all the tasks in the list.
 
-To hide the drop-down menus, you can press Esc at any time or press X button.
+> **danger** Danger
+>   This feature is experimental. It is recommended to use it on a copy of your document space.
+
+Activating this mode (button Update) and executing order is the same as querying (see below). The syntax is simple: a `verb` (add, delete, replace) + “`:`“ + `name of attribute` (value can be provided when adding) and “`->`“ to replace. Spaces are not meaningful. Please refer to the placeholder of the input.
+
+The list can be extracted with custom where clause and filtered, **before** applying the treatment.
+  
+## Filter and query
+  
+To activate these features, click in the input box, then choose the button in the menu.
+
+The input box is used to define:
+- in filter mode: the **filter**
+- in query mode: the **custom where clause**
+
+Menus provide input **assistance** to complete the input area:
+- for both modes: list of ==attributes== collected in the current list
+- for query mode only:
+    - list of ==standard properties==
+    - library of ==where clauses history==
+    - library of ==where clauses examples==
+When you select one of these items, its formatted content is transferred in the input area.
       
-      The input area accepts direct keyboard entry, copy-paste operation and paste from the menu.     
-      After changing the content of input box:
-          - filter mode: immediate application (live)
-          - where mode: deferred application. Press Enter to execute the query.
-    To exit the input area and hide the context menus, press Esc or click the X button.  
+The input area accepts direct keyboard entry, copy-paste operation and paste from the menu.     
+To hide the drop-down menus, press **Esc** or click out of the input. To show the menus again **right click** on the input.
 
-> **success** **Important !**
->  Rules for filtering and designing custom where clauses are outlined in a markdown page displayed via a button on the toolbar ==Instructions_for_Task_Explorer.md==.
+> **note** Application
+>      Filter mode: immediate application (live)
+>      Query mode : press **Enter** to execute the query
+
+Please, refer to ==Instructions_for_Task_Explorer.md== (via a button on the toolbar) for detailled **rules** for filtering and designing custom where clauses.
 
 ---
 
-# Technical concepts
+# Environment
 
-## 🪟Multi-windowing
+## Multi-windowing
 
-The multi-windowing concept uses two types of components:
-- the **resizable floating** panels are an extension of the fixed panels integrated into SilverBullet These **==three fixed panels==** are identified by their position: ==**lhs**== (left), ==**rhs**== (right) and ==**bhs**== (bottom).
-- **autonomous synthetic** panels designed directly in html, potentially in unlimited numbers
+These functionalities are developed and diffused [by Mr.Red](https://community.silverbullet.md/t/advanced-panel-controls-e-g-resizing-side-panels-lhs-rhs-bhs-using-your-mouse/3728/33)
+via his library `UnifiedAdvancedPanelControl.js`.
 
-> **note** Note : all these objects are **iframes**
->  - when a markdown page is opened in an “autonomous synthetic” panel, a new SilverBullet **session** is created. There will be as many SilverBullet sessions open as synthetic panels created. An autonomous synthetic panel is equivalent to a new tab.
->  - Document Explorer and Task Explorer don’t generate a new SilverBullet session. They are designed on the fly in strict html associated with js and css.
+The concept uses two types of iframe:
+- **resizable floating** panels which extend the functionalities of the three fixed panels incorporated into SilverBullet, designated by their position: left= ==lhs== | right= ==rhs== | bottom= ==bhs==).
+- **synthetic** panels, in unlimited numbers, designed on the fly
 
-Access to features of multi-windowing is **limited** (as of 01/21/2026):
+> **note**  Sessions
+>  - Document Explorer and Task Explorer are pieces of html+js+css injected into one of the three panels. They don’t generate a new SilverBullet session.
+>  - conversely, when a markdown page is opened in a synthetic panel, a new SilverBullet **session** is created. Each new synthetic panel opened with an md page creates a new session. A synthetic panel is equivalent to a **new tab**. 
 
-1- the management of the ==rhs== panel by SilverBullet is buggy: as soon as you start to type in the main window, the panel disappears. An issue was opened on 01/15/2026: [Bug: rhs panel is completely removed from the DOM when typing # 1779](https://github.com/silverbulletmd/silverbullet/issues/1779)
-2- management of the ==bhs== panel by Mr.Red's `UnifiedAdvancedPanelControl.js` library is partial (it does not take into account bhs). A complementary development would be appreciated.
+> **warning** Limit
+>   The bhs panel is only partially supported by Mr.Red's library
 
-💡 **Assigning a panel to Task Explorer**
-The default pannel is ==lhs==. You can modify it with `config.set` command, like this :
-
+**Default panel for Task Explorer** is ==rhs==. You can modify it with `config.set` command, like this :
 ```lua
+-- change lua block to space-lua or copy this line in your config.md
 config.set("explorer2", { position = "bhs" })
 ```
-_change lua block to space-lua block or copy the line to your config.md_
 
-> **warning** Each panel is unique
->  If multiple tools use the same panel, the last activated replaces the previous one in the panel. This generally poses no problem but requires double calling to open it (keyboard shortcut | button).
+> **note** lhs, rhs, bhs
+>  Each panel resizable is unique. If multiple tools use the same panel, the last activated replaces the previous one in the panel. This generally poses no problem but requires double calling to open it with toogle command (via keyboard shortcut or button).
 
-**Advices**:
-- **==lhs==** : the best choice
-- **==rhs==**: you can view tasks, filter, query, modify the status and open the original task page but if you want to update the original page, you must open a new session SilverBullet in a **secondary window (synthetic panel)** via a button on the toolbar.
-- **==bhs==** (not very suitable to mobile). On a desk, better visibility of the sometimes long text. But **multi-windowing is limited**: the panel, docked by default, can become floating but it cannot be docked again; to do this, you will have to close it then reopen it.
+## Styling
 
-## 🖼️Styling
+> **warning** Dark mode
+>      Currently, Task Explorer is not entirely compatible with dark mode
 
-> **warning** Warning
->      Currently, Task Explorer is not compatible with dark mode !
+- The **panel style** is managed by `taskex_styles.css`.
+   The last section: `11. MAIN UI (Colors)` can be customized in a `space-style` within your space.
 
-- The **panel style** is managed by Mr.Red's `docex_styles.css`, the last section of which (11. MAIN UI (Colors)) can be customized in a `space-style` (see the Document Explorer presentation).
+A colored gauge is used when Task Explorer execute a query or an update with batch processing:
+```space-style
+/* You can modifie it here or by copying this line into your config style and then suppr this one */
+html[data-theme="light"] {
+  --progress-mon-type-color: #00E439;   /* light green */
+}
+```
   
-      ⚠️ docex_styles.css is loaded when the panel is opened. Many of rules in `docex_styles.css` refer to css variables through css variables defined in main.css, which is reloaded/reactivated just before loading docex_styles.css.
+- The **style of tasks** can be finely customized since SilverBullet’s version 2.40. You can apply rules to one or all attributes and/or to all or certain values.
+  
+  Several examples are available here:
+    - https://community.silverbullet.md/t/decorate-attributes-with-emojis/3823/12
+    - https://community.silverbullet.md/t/task-dynamic-styling/3708/14
 
-      So, if you want to change the default color of the panel background (like me !), modify directly the variable css in your space-style (section: html[data-theme="dark"] or: html[data-theme="light"]) like this;  "--top-background-color: white;“
+The edge version published 2026-02-04 modify the spans’s classes of the name and the value of an attribute, i.e. respectively:
+- `sb-attribute-name` for the attribute name. This classe replaces `sb-atom`.
+- `sb-attribute-value` for the attribute value. Previously, this span had no class.
 
-- The **style of tasks** can be now finely customized since version 2.40 of SilverBullet (and the 2nd Edge version of 08/01). Rules can be applied individually to all or certain attributes and/or all or certain values. The `ConfigStyles_for_TaskExplorer.md` file includes several examples. An issue was created on 01/10 to target values more easily: [Add class to value attributes # 1768](https://github.com/silverbulletmd/silverbullet/issues/1768).
-
-    Styles defined for tasks apply to ==both the original task and its reflection== in Task Explorer.
+Certain of the examples above might be adapted if you uses a version past to 2026-02-04. Task Explorer detect the version in execution and adapt the list after edge version of 2026-02-06 (not 04).
+  
+Styles defined for tasks apply to ==**both** the original task and its copy in Task Explorer==.
 
 ---
 
-# Installation
+# Implementation
 
-1) First, install **Document Explorer** or **AdvancedPanelControl** by Mr.Red via his repository : https://github.com/Mr-xRed/silverbullet-libraries/blob/main/Repository/Mr-xRed.md
-    with Library Manager.
+## Installation
 
-> **note** This installation creates the folder `Library/Mr-xRed/` if it does not already exist
->      and drop in these two files required for Task Explorer:
-              UnifiedAdvancedPanelControl.js (central multi-window script)
-              docex_styles.css (css rules for panels and multi-windowing tools)
+1) First, install **Document Explorer** and/or **AdvancedPanelControl** by Mr.Red with Library Manager via his repository:
+      https://github.com/Mr-xRed/silverbullet-libraries/blob/main/Repository/Mr-xRed.md
+    `UnifiedAdvancedPanelControl.js` is copied in the folder `Library/Mr-xRed/`.
 
-2) Then, install **Task Explorer**. Download eight files from [my Github](https://github.com/Baudogit/silverbullet/tree/main/Task%20Explorer):
+> **note** Note
+>   You can use Task Explorer without `UnifiedAdvancedPanelControl` but, in this case, you will not have access to multi-window functionalities.
+
+3) Then, install **Task Explorer**. Download these files from [my Github](https://github.com/Baudogit/silverbullet/tree/main/Task%20Explorer):
 
            TaskExplorer.md (this file)
+           Instructions_for_Task_Explorer.md (filtering and querying rules)
+           ConfigStyles_for_TaskExplorer.md
+           taskex_styles.css
            lucide-icons.svg (icons)
-           ConfigStyles_for_TaskExplorer.md (copy and modify his content to your own space-style)
-           Instructions_for_Task_Explorer.md (documents filtering and querying rules)
-           where-examples.txt (clauses where examples for sub-menu)
-           where-history.txt (clauses where history for sub-menu)
-           12.png (illustration)
-           13.png (illustration)
+           where-history.txt (custom clauses where history)
+           where-examples.txt (custom where clauses examples)
 
      and put them in your SilverBullet space here: “Library/**baudogit**/“
 
-## 🎲 Configuration
+## Configuration
 
 Copy the code below into your space-lua configuration (all items are **optional**):
 ````lua
 config.set("explorer2", {
-  position = "bhs",
+  -- panel to use
+  position = "rhs",
+  -- query executed when opening Task Explorer
   where = "not done and some(_.attrib1) ~= nil and string.sub(_.attrib1,1,10) <= '2026-01-01'",
+  -- if this request must be re-executed during a reset
   whereAlways = "true",
+  -- maximum number of lines in history
   maxWhereHistory = 25
 })
 ````
 
-## 💬Discussion
+## Discussion
 
-- Document Manager: https://community.silverbullet.md/t/document-explorer-for-silverbullet/3647/159
-- Task Explorer (old version): https://community.silverbullet.md/t/task-explorer/3747/2
-- Task Explorer revisited (this version): https://community.silverbullet.md/t/task-explorer-revisited/3805
-- See also Task Manager: https://community.silverbullet.md/t/todo-task-manager-global-interactive-table-sorter-filtering/3767
+- Task Explorer: https://community.silverbullet.md/t/task-explorer-revisited/3805
+- Document Manager https://community.silverbullet.md/t/document-explorer-for-silverbullet/3647/159
+See also :
+- Task Manager by Mr.Red: https://community.silverbullet.md/t/todo-task-manager-global-interactive-table-sorter-filtering/3767
 
-## 🛠️Integration
-
-The code (+ 1900 lines) is placed in 3 spaces-lua on `TaskExplorer.md` (this file):
-
-::: ==space-lua 1== (main) ::: CONFIG | REFRESH LOGIC | **DRAW PANEL** | COMMANDS
-
-    Details for DRAW PANEL:
-TOOLBAR | BREADCRUMB | HTML INJECTION | **SCRIPT JS** | DISPLAY
-
-    Details for SCRIPT JS:
-TASK UPDATE | BUILD MENU | SEARCH FILTER | BUILD CUSTOM CLAUSE WHERE | **BUILD TASKS LIST** | STYLES INJECTION
-
-    Functions used by BUILD TASKS LIST:
-
-::: ==space-lua 2== ::: BUILD QUERY | BUILD TASK HTML | TEMPLATES
-::: ==space-lua 3== ::: FORMAT PAGE | FORMAT TASK
+**Upcoming developments:**
+- Interface: adapt style to dark theme
+- List: add sort option
+- Filter: add un “-” operator ; when a filter is applied and page break active, count the number of tasks displayed per page
+- Queries: add submenus to select itags, tags and/or parents ; modify list of attributes (all in the index rather than in the list) ; display custom where clause active in a tooltip ;
+- Update: add a replace option for value ; calculate the value according to a formula
+- Issues: ...
 
 ---
 
-# Development and issues
+::: ==space-lua 1== (main) ::: CONFIG | REFRESH | UPDATE | **DRAW PANEL** | COMMANDS
 
-## ⚙️Interface
-- adapt style to dark theme
+    Details for DRAW PANEL:
+TOOLBAR | BREADCRUMB | HTML | **JS SCRIPT** | DISPLAY
 
-##  ⚙️Filter
-- when a filter is applied and page break active, count the number of tasks displayed per page
+    Details for JS SCRIPT:
+TASK UPDATE | BUILD MENUS | SEARCH FILTER | CUSTOM CLAUSE WHERE | **BUILD TASKS LIST** | STYLES |
 
-## ⚙️Queries
-- add submenus to select itags, tags and/or parents
+    Functions used by BUILD TASKS LIST:
 
-## ⚠️ Issues
-none
-  
+::: ==space-lua 2== ::: BUILD QUERY | BUILD HTML | TEMPLATES
+::: ==space-lua 3== ::: FORMAT PAGE | FORMAT TASK
+
 ---
 
 ```space-lua
 -- priority: -1
 -- ::: space-lua 1 :::
 
--- Structure of this code comes from the great work of Mr.Red
-
 -- ---------- CONFIG ----------
 
 -- Schema
 config.define("explorer2", {
-    type = "object",
-    properties = {
-        position = schema.string(),
-        where = schema.string(),
-        whereAlways = schema.string(),
-        maxWhereHistory = schema.number()
-    }
+  type = "object",
+  properties = {
+    position = schema.string(),
+    where = schema.string(),
+    whereAlways = schema.string(),
+    maxWhereHistory = schema.number()
+  }
 })
 
 -- Icons
 local ICONS = {
-    list       =
-    "<svg class='icon-list' style='width: 1em; height: 1em; vertical-align: middle;'><use href='/.fs/Library/baudogit/lucide-icons.svg#icon-list'></use></svg>",
-    tree       =
-    "<svg class='icon-tree' style='width: 1em; height: 1em; vertical-align: middle;'><use href='/.fs/Library/baudogit/lucide-icons.svg#icon-tree'></use></svg>",
-    refresh    =
-    "<svg class='icon-refresh' style='width: 1em; height: 1em; vertical-align: middle;'><use href='/.fs/Library/baudogit/lucide-icons.svg#icon-refresh'></use></svg>",
-    close      =
-    "<svg class='icon-close' style='width: 1em; height: 1em; vertical-align: middle;'><use href='/.fs/Library/baudogit/lucide-icons.svg#icon-close'></use></svg>",
-    info       =
-    "<svg class='icon-info' style='width: 1.3em; height: 1.3em; vertical-align: middle;'><use href='/.fs/Library/baudogit/lucide-icons.svg#icon-info'></use></svg>",
-    squareplus =
-    "<svg class='icon-square-plus' style='width: 1em; height: 1em; vertical-align: middle;'><use href='/.fs/Library/baudogit/lucide-icons.svg#icon-square-plus'></use></svg>",
-    square     =
-    "<svg class='icon-square' style='width: 1em; height: 1em; vertical-align: middle;'><use href='/.fs/Library/baudogit/lucide-icons.svg#icon-square'></use></svg>"
+  list       =
+  "<svg class='icon-list' style='width: 1em; height: 1em; vertical-align: middle;'><use href='/.fs/Library/baudogit/lucide-icons.svg#icon-list'></use></svg>",
+  tree       =
+  "<svg class='icon-tree' style='width: 1em; height: 1em; vertical-align: middle;'><use href='/.fs/Library/baudogit/lucide-icons.svg#icon-tree'></use></svg>",
+  refresh    =
+  "<svg class='icon-refresh' style='width: 1em; height: 1em; vertical-align: middle;'><use href='/.fs/Library/baudogit/lucide-icons.svg#icon-refresh'></use></svg>",
+  close      =
+  "<svg class='icon-close' style='width: 1em; height: 1em; vertical-align: middle;'><use href='/.fs/Library/baudogit/lucide-icons.svg#icon-close'></use></svg>",
+  info       =
+  "<svg class='icon-info' style='width: 1.3em; height: 1.3em; vertical-align: middle;'><use href='/.fs/Library/baudogit/lucide-icons.svg#icon-info'></use></svg>",
+  squareplus =
+  "<svg class='icon-square-plus' style='width: 1em; height: 1em; vertical-align: middle;'><use href='/.fs/Library/baudogit/lucide-icons.svg#icon-square-plus'></use></svg>",
+  square     =
+  "<svg class='icon-square' style='width: 1em; height: 1em; vertical-align: middle;'><use href='/.fs/Library/baudogit/lucide-icons.svg#icon-square'></use></svg>"
 }
 
 -- Load config
 local cfg = config.get("explorer2") or {}
-local PANEL_ID = cfg.position or "lhs"
+local PANEL_ID = cfg.position or "rhs"
 local WHERE_INIT = cfg.where or ""
 local WHERE_ALWAYS = cfg.whereAlways or "false"
-local maxEntries = cfg.maxWhereHistory or 20
+local maxEntries = cfg.maxWhereHistory or 25
+
+-- SilverBullet's version
+local version = system.getVersion()
+local date = string.match(version, "(%d%d%d%d%-%d%d%-%d%d)")
+if date == nil then date = "2000-01-01" end
+js.window.sessionStorage.setItem("dateVersion", date)
 
 -- Others variables and constants
 local PANEL_VISIBLE = false
@@ -285,327 +300,544 @@ js.window.sessionStorage.setItem("searchInit", "true")
 js.window.sessionStorage.setItem("searchTerm", WHERE_INIT)
 js.window.sessionStorage.setItem("searchTermFilter", "")
 
+------------------------- HELPER TO UPDATE ATTRIBUTE -----------------------
+-- Pending resolvers and global single listener
+pendingModals = {}
+event.listen {
+  name = "updateConfirmResult",
+  run = function(e)
+    local id = e.data.id
+    local value = e.data.value
+    local resolve = pendingModals[id]
+    if resolve then
+      resolve(value)
+      pendingModals[id] = nil
+    end
+  end
+}
+
 -- ---------- REFRESH LOGIC ----------
 
--- last update
+-- Last update
 function triggerHighlightUpdate()
-    clientStore.set("explorer2.lastUpdate", os.time() .. math.random())
+  clientStore.set("explorer2.lastUpdate", os.time() .. math.random())
 end
 
 -- Reset tasks list
 function refreshExplorer2Button()
-    if WHERE_ALWAYS == "true" then
-        js.window.sessionStorage.setItem("searchTerm", WHERE_INIT)
-        drawPanel("maj", WHERE_INIT)
-    else
-        js.window.sessionStorage.setItem("searchTerm", "")
-        drawPanel("maj")
-    end
-    triggerHighlightUpdate()
+  if WHERE_ALWAYS == "true" then
+    js.window.sessionStorage.setItem("searchTerm", WHERE_INIT)
+    drawPanel("maj", WHERE_INIT)
+  else
+    js.window.sessionStorage.setItem("searchTerm", "")
+    drawPanel("maj")
+  end
+  triggerHighlightUpdate()
 end
 
 -- Toggle with or without completed tasks
 function toggleQueryButton()
-    local whereClause = ""
-    local current = clientStore.get("explorer2.queryAll")
-    if current == "true" then
-        clientStore.set("explorer2.queryAll", "false")
-    else
-        clientStore.set("explorer2.queryAll", "true")
-    end
+  local whereClause = ""
+  local current = clientStore.get("explorer2.queryAll")
+  if current == "true" then
+    clientStore.set("explorer2.queryAll", "false")
+  else
+    clientStore.set("explorer2.queryAll", "true")
+  end
 
-    -- Preserve custom query, if one exists
-    local savedSearchTerm = js.window.sessionStorage.getItem("searchTerm");
-    if savedSearchTerm ~= nil and savedSearchTerm ~= "" then
-        whereClause = savedSearchTerm
-    end
+  -- Preserve custom query, if one exists
+  local savedSearchTerm = js.window.sessionStorage.getItem("searchTerm");
+  if savedSearchTerm ~= nil and savedSearchTerm ~= "" then
+    whereClause = savedSearchTerm
+  end
 
-    drawPanel("maj", whereClause)
-    triggerHighlightUpdate()
+  drawPanel("maj", whereClause)
+  triggerHighlightUpdate()
 end
 
--- Updating task on original page
+-- ---------- UPDATE TASK ----------
+
+-- 1) TOGGLE STATUS
 local function toggleTaskRemote(pageName, pos, currentState, statePerso)
-    local content = space.readPage(pageName)
-    if not content then return end
+  local content = space.readPage(pageName)
+  if not content then return end
 
-    -- Return if custom status
-    if statePerso ~= "" then
-        editor.flashNotification("Custom status. No modification!")
-        return
-    end
+  -- Return if custom status
+  if statePerso ~= "" then
+    editor.flashNotification("Custom status. No modification!")
+    return
+  end
 
-    -- Show a progress indicator
-    editor.showProgress(0, "custom")
+  editor.showProgress(0, "custom")
 
-    -- Edit the original line (string between brackets at the start)
-    local lineEnd = content:find("\n", pos + 1) or (#content + 1)
-    local originalLine = content:sub(pos + 1, lineEnd - 1)
+  -- Edit the original line (string between brackets at the start)
+  local lineEnd = content:find("\n", pos + 1) or (#content + 1)
+  local originalLine = content:sub(pos + 1, lineEnd - 1)
 
-    local newLine = ""
-    local timestamp = os.date("%Y-%m-%d %H:%M")
+  local newLine = ""
+  local timestamp = os.date("%Y-%m-%d %H:%M")
 
-    if currentState == " " or currentState == "" then
-        local cleaned = originalLine:gsub("%[%s*%]", "[x]")
-        cleaned = cleaned:gsub("%s*%[completed: [^%]]+]", "")
-        newLine = cleaned .. " [completed: " .. timestamp .. "]"
-    else
-        local cleaned = originalLine:gsub("%[[xX]%]", "[ ]")
-        newLine = cleaned:gsub("%s*%[completed: [^%]]+]", "")
-    end
+  if currentState == " " or currentState == "" then
+    local cleaned = originalLine:gsub("%[%s*%]", "[x]")
+    cleaned = cleaned:gsub("%s*%[completed: [^%]]+]", "")
+    newLine = cleaned .. " [completed: " .. timestamp .. "]"
+  else
+    local cleaned = originalLine:gsub("%[[xX]%]", "[ ]")
+    newLine = cleaned:gsub("%s*%[completed: [^%]]+]", "")
+  end
 
-    local prefix = content:sub(1, pos)
-    local suffix = content:sub(lineEnd)
-    local finalContent = prefix .. newLine .. suffix
-    space.writePage(pageName, finalContent)
+  local prefix = content:sub(1, pos)
+  local suffix = content:sub(lineEnd)
+  local finalContent = prefix .. newLine .. suffix
+  space.writePage(pageName, finalContent)
 
-    -- Wait for asynchronous indexing to complete
-    mq.awaitEmptyQueue("indexQueue")
-    -- another await will be applied just before querying the tasks
-
-    js.window.setTimeout(function()
-        drawPanel("yes")
-        triggerHighlightUpdate()
-        editor.showProgress()
-    end, 100)
+  js.window.setTimeout(function()
+    drawPanel("yes")
+    triggerHighlightUpdate()
+    editor.showProgress()
+  end, 100)   -- an awaitEmptyQueue will be applied just before querying the tasks
 end
 
--- ---------- HISTORY FILE ----------
--- Write query
-local function writeToHistory(whereClause)
-    if not whereClause or whereClause == "" then return end
-    local historyFile = "Library/baudogit/where-history.txt"
-    local contentBinary = space.readFile(historyFile) or ""
-    local content = encoding.utf8Decode(contentBinary);
+-- 2) UPDATE ATTRIBUTE
 
-    -- Format: "NN | whereClause"
-    local lines = {}
+-- 2.1) Modify task line
+local function modifyTaskLine(content, pos, action, attrName, newValue)
+  local lineEnd = content:find("\n", pos + 1) or (#content + 1)
+  local originalLine = content:sub(pos + 1, lineEnd - 1)
+  local newLine = originalLine
+  local modified = false
 
-    for line in content:gmatch("[^\r\n]+") do
-      --line = "" .. line
-      local cleaned = string.gsub(string.gsub(string.gsub(line, '^"', ''), '",$', ''), '"$', '')
-      if cleaned ~= "" then
-          table.insert(lines, cleaned)
+  if action == "add" then
+    local pattern = "%[" .. attrName .. ":%s*[^%]]*%]"
+    if originalLine:match(pattern) then
+      modified = false
+    else
+      local value = newValue
+      if value == "" then
+        value = ".."
+      end
+      newLine = originalLine .. " [" .. attrName .. ": " .. value .. "]"
+      modified = true
+    end
+  elseif action == "delete" then
+    newLine = originalLine:gsub("%s*%[" .. attrName .. ":%s*[^%]]+%]", "")
+    modified = (newLine ~= originalLine)
+  elseif action == "rename" then
+    newLine = originalLine:gsub("%[" .. attrName .. ":", "[" .. newValue .. ":")
+    modified = (newLine ~= originalLine)
+  end
+
+  if not modified then
+    return nil, false
+  end
+
+  local prefix = content:sub(1, pos)
+  local suffix = content:sub(lineEnd)
+  return prefix .. newLine .. suffix, true
+end
+
+-- 2.2) Batch processing
+local function updateTaskAttributes(taskIds, action, attributeName, newValue)
+  editor.showProgress(0, "Analyzing...")
+
+  -- Group by page
+  local pageGroups = {}
+  for _, taskId in ipairs(taskIds) do
+    local pageName, posStr = taskId:match("(.+)@(%d+)")
+    if pageName and posStr then
+      local pos = tonumber(posStr)
+      if not pageGroups[pageName] then
+        pageGroups[pageName] = {}
+      end
+      table.insert(pageGroups[pageName], pos)
+    end
+  end
+
+  -- BLANK LOOP to count the modifications to be made
+  local modifCount = 0
+  local modifPerPage = 0
+  local logPos = ""
+  local logAction = ""
+  local logPages = ""
+
+  -- LOG
+  logAction = "************ TO UPDATE *************\n"
+  logAction = logAction .. "Action: " .. action .. " | Attribute: " .. attributeName .. " | String: " .. newValue
+  js.log(logAction)
+
+  for pageName, positions in pairs(pageGroups) do
+    table.sort(positions, function(a, b) return a > b end)
+    modifPerPage = 0
+    logPos = "\nTasks position: "
+
+    for _, pos in ipairs(positions) do
+      local content = space.readPage(pageName)
+      if content then
+        local _, wasModified = modifyTaskLine(content, pos, action, attributeName, newValue)
+        if wasModified then
+          modifCount = modifCount + 1
+          modifPerPage = modifPerPage + 1
+          logPos = logPos .. pos .. "-"
+        end
+      end
+    end
+    
+    -- Feedback
+    if modifPerPage == 0 then
+      js.log("Page: " .. pageName .. " :: no task to update")
+      logPages = logPages .. "\nPage: " .. pageName .. " :: no task to update"
+    else
+      js.log("Page: " .. pageName .. " :: " .. modifPerPage .. " tasks to update" .. logPos)
+      logPages = logPages .. "\nPage: " .. pageName .. " :: " .. modifPerPage .. " tasks to update" .. logPos
+    end
+  end
+  if modifCount == 0 then
+    editor.flashNotification("No tasks to update")
+    editor.showProgress()
+    return
+  end
+
+  -- REQUEST FOR CONFIRMATION
+  local actionText = action == "add" and "Adding" or (action == "delete" and "Deleting" or "Renaming")
+  local attrText = action == "rename" and (attributeName .. " -> " .. newValue) or attributeName
+  local confirmMessage = actionText .. " attribute [" .. attrText .. "] on " .. modifCount .. " task(s). Continue?"
+  local displayLog = logAction .. logPages
+
+  local callId = tostring(os.time()) -- UUID not available
+  local result = nil
+
+  -- Registers the resolver for this call
+  pendingModals[callId] = function(value)
+    if value ~= "yes" then
+      editor.flashNotification("Update cancelled !!")
+      editor.showProgress()
+      return
+    end
+
+    -- REAL TREATMENT
+    editor.showProgress(0, "Updating attributes...")
+
+    for pageName, positions in pairs(pageGroups) do
+      table.sort(positions, function(a, b) return a > b end)
+
+      local posStr = ""
+      local content = space.readPage(pageName)
+      if content then
+        local workingContent = content
+        for _, pos in ipairs(positions) do
+          local newContent, wasModified = modifyTaskLine(workingContent, pos, action, attributeName, newValue)
+          if wasModified then
+            workingContent = newContent -- Accumulate
+          end
+        end
+        -- Write ONLY ONCE after all changes to the page
+        if workingContent ~= content then
+          space.writePage(pageName, workingContent)
+        end
       end
     end
 
-    -- Check if query already exists (avoid duplicates)
-    local clauseOnly = whereClause:match("^%d+ | (.+)$") or whereClause
-    for i, line in ipairs(lines) do
-        if line:match("^%d+ | (.+)$") == clauseOnly then
-            table.remove(lines, i)
-            break
-        end
-    end
+    js.window.setTimeout(function()
+      -- Preserve custom query, if one exists
+      local savedSearchTerm = js.window.sessionStorage.getItem("searchTerm");
+      if savedSearchTerm ~= nil and savedSearchTerm ~= "" then
+        whereClause = savedSearchTerm
+      end
+      drawPanel("maj", whereClause)
+      triggerHighlightUpdate()
+      editor.showProgress()
+      editor.flashNotification(modifCount .. " task(s) updated")
+    end, 100) -- an awaitEmptyQueue will be applied just before querying the tasks
+  end
 
-    -- Add new entry at top
-    table.insert(lines, 1, clauseOnly)
-    -- Keep only maxEntries
-    while #lines > maxEntries do
-        table.remove(lines)
-    end
-    -- Renumber and format
-    local newContent = ""
-    for i, line in ipairs(lines) do
-        local num = string.format("%02d", maxEntries - i + 1)
-        local clause = line:match("^%d+ | (.+)$") or line
-        newContent = newContent .. '"' .. num .. " | " .. clause .. '",\n'
-    end
+  -- Call the modal
+  js.window.showUpdateConfirmationModal(displayLog, confirmMessage, callId)
+end
 
-    newContentBinary = encoding.utf8Encode(newContent)
-    space.writeFile(historyFile, newContentBinary)
+-- ---------- HISTORY FILE OF WHERE CLAUSES ----------
+
+-- Write query
+local function writeToHistory(whereClause)
+  if not whereClause or whereClause == "" then return end
+  local historyFile = "Library/baudogit/where-history.txt"
+  local contentBinary = space.readFile(historyFile) or ""
+  local content = encoding.utf8Decode(contentBinary);
+
+  -- Format: "NN | whereClause"
+  local lines = {}
+
+  for line in content:gmatch("[^\r\n]+") do
+    local cleaned = string.gsub(string.gsub(string.gsub(line, '^"', ''), '",$', ''), '"$', '')
+    if cleaned ~= "" then
+      table.insert(lines, cleaned)
+    end
+  end
+
+  -- Check if query already exists (avoid duplicates)
+  local clauseOnly = whereClause:match("^%d+ | (.+)$") or whereClause
+  for i, line in ipairs(lines) do
+    if line:match("^%d+ | (.+)$") == clauseOnly then
+      table.remove(lines, i)
+      break
+    end
+  end
+
+  -- Add new entry at top
+  table.insert(lines, 1, clauseOnly)
+  -- Keep only maxEntries
+  while #lines > maxEntries do
+    table.remove(lines)
+  end
+  -- Renumber and format
+  local newContent = ""
+  for i, line in ipairs(lines) do
+    local num = string.format("%02d", maxEntries - i + 1)
+    local clause = line:match("^%d+ | (.+)$") or line
+    newContent = newContent .. '"' .. num .. " | " .. clause .. '",\n'
+  end
+
+  newContentBinary = encoding.utf8Encode(newContent)
+  space.writeFile(historyFile, newContentBinary)
 end
 
 -- ---------- DRAW PANEL ----------
 local function drawPanel(seeMess, clauseWhere)
-    local currentWidth = clientStore.get("explorer2.panelWidth") or config.get("explorer2.panelWidth") or 0.8
-    local viewMode = clientStore.get(VIEW2_MODE_KEY) or "list"
-    local filterEnabled = clientStore.get("explorer2.disableFilter") ~= "true"
-    local allTasks = clientStore.get("explorer2.queryAll") == "true"
-    local h = {}
+  local currentWidth = clientStore.get("explorer2.panelWidth") or config.get("explorer2.panelWidth") or 0.8
+  local viewMode = clientStore.get(VIEW2_MODE_KEY) or "list"
+  local filterEnabled = clientStore.get("explorer2.disableFilter") ~= "true"
+  local allTasks = clientStore.get("explorer2.queryAll") == "true"
 
-    table.insert(h, [[<div data-panel="myPanel" class="explorer-panel mode-]])
-    table.insert(h, viewMode)
+  editor.showProgress(20, "DRAW...")
+  local h = {}
 
-    -- ---------- DRAW | EN-TÊTE -----------
-    js.window.sessionStorage.setItem("searchTermFilter", "")
-    searchTermCh = js.window.sessionStorage.getItem("searchTerm")
-    table.insert(h, [[">
+  table.insert(h, [[<div data-panel="myPanel" class="explorer-panel mode-]])
+  table.insert(h, viewMode)
+
+  -- ---------- EN-TÊTE -----------
+  js.window.sessionStorage.setItem("searchTermFilter", "")
+  searchTermCh = js.window.sessionStorage.getItem("searchTerm")
+  table.insert(h, [[">
             <div class="explorer-header">
               <div class="explorer-toolbar">
                 <div class="input-wrapper">
-                  <input id="tileSearch" title="Filter list or query index" placeholder="&nbsp;&nbsp;&nbsp;&nbsp;...&nbsp;&nbsp; (filter ou query)" </input>
-                </div>
-                <div class="mode-switcher">
-                  <div id="listMode" title="]])
-    table.insert(h, "Filter : ")
-    table.insert(h,
-        [[" Mode list" class="" onclick="switchSearchMode('list', document.getElementById('tileSearch'))">Filter]])
-    table.insert(h, [[</div>
-                  <div id = "whereMode" title="]])
-    table.insert(h, "Where : " .. searchTermCh)
-    table.insert(h,
-        [[" Mode query" class="" onclick="switchSearchMode('where', document.getElementById('tileSearch'))">Query]])
-    table.insert(h, [[</div>
+                  <input id="tileSearch" title="Filter / Query / Update" placeholder="&nbsp;&nbsp;&nbsp;&nbsp;...&nbsp;&nbsp;Please choose Filter, Query or Update" </input>
+                </div> 
+                <div class="mode-switcher">   
                     <div id= "searchInfo" title="Instructions for use"]])
-    table.insert(h, [[" onclick="syscall('editor.invokeCommand','Open: Instructions')">]])
-    table.insert(h, ICONS.info)
-    table.insert(h, [[</div>
+  table.insert(h, [[" onclick="syscall('editor.invokeCommand','Open: Instructions')">Instructions]])
+  --table.insert(h, ICONS.info)
+  table.insert(h, [[</div>
                 </div>
                 <div class="view-switcher">
                   <div title="Show/hide completed"
                         class="" id="tree-toggle-btn"
                         style="display: ]])
-    table.insert(h, (viewMode == "list"))
-    table.insert(h, [[" onclick="syscall('lua.evalExpression', 'toggleQueryButton()')">
+  table.insert(h, (viewMode == "list"))
+  table.insert(h, [[" onclick="syscall('lua.evalExpression', 'toggleQueryButton()')">
                         <span id="tree-toggle-icon">]])
-    if allTasks then
-        table.insert(h, ICONS.squareplus)
-    else
-        table.insert(h, ICONS.square)
-    end
-    table.insert(h, [[</span></div>
+  if allTasks then
+    table.insert(h, ICONS.squareplus)
+  else
+    table.insert(h, ICONS.square)
+  end
+  table.insert(h, [[</span></div>
                   <div title="List without page break" class="]])
-    table.insert(h, (viewMode == "list" and "active" or ""))
-    table.insert(h, [[" onclick="syscall('editor.invokeCommand','TaskExplorer: Change View Mode',{mode:'list'})">]])
-    table.insert(h, ICONS.list)
-    table.insert(h, [[</div>
+  table.insert(h, (viewMode == "list" and "active" or ""))
+  table.insert(h, [[" onclick="syscall('editor.invokeCommand','TaskExplorer: Change View Mode',{mode:'list'})">]])
+  table.insert(h, ICONS.list)
+  table.insert(h, [[</div>
                   <div title="List with page break" class="]])
-    table.insert(h, (viewMode == "tree" and "active" or ""))
-    table.insert(h, [[" onclick="syscall('editor.invokeCommand','TaskExplorer: Change View Mode',{mode:'tree'})">]])
-    table.insert(h, ICONS.tree)
-    table.insert(h, [[</div>
+  table.insert(h, (viewMode == "tree" and "active" or ""))
+  table.insert(h, [[" onclick="syscall('editor.invokeCommand','TaskExplorer: Change View Mode',{mode:'tree'})">]])
+  table.insert(h, ICONS.tree)
+  table.insert(h, [[</div>
                 </div>
                 <div class="action-buttons" style="display: flex; gap: 4px;">]])
-    table.insert(h, [[<div title="Reset the list" class="explorer-action-btn" id="refresh-btn"
+  table.insert(h, [[<div title="Reset the list" class="explorer-action-btn" id="refresh-btn"
                         onclick="syscall('lua.evalExpression', 'refreshExplorer2Button()')">]])
-    table.insert(h, ICONS.refresh)
-    local filterDisabled = clientStore.get("explorer2.disableFilter") == "true"
-    local activeClass = filterDisabled and " active" or ""
-    table.insert(h, [[</div>
+  table.insert(h, ICONS.refresh)
+  local filterDisabled = clientStore.get("explorer2.disableFilter") == "true"
+  local activeClass = filterDisabled and " active" or ""
+  table.insert(h, [[</div>
                 <div title="Toggle page opening mode"
                         class="explorer-action-btn]] .. activeClass .. [[" id="openingMode-btn"
                         onclick="syscall('editor.invokeCommand','TaskExplorer: Toggle Opening Mode')">]])
-    table.insert(h, (filterDisabled and "🟢" or "🟠"))
-    table.insert(h, [[</div>
+  table.insert(h, (filterDisabled and "🟢" or "🟠"))
+  table.insert(h, [[</div>
                 </div>
-
                   <div class="action-buttons" style="display: flex; gap: 4px;">
                         <div class="explorer-close-btn" title="Close Explorer" onclick="syscall('editor.invokeCommand', 'Navigate: Task Explorer')">]])
-    table.insert(h, ICONS.close)
-    table.insert(h, [[</div>
+  table.insert(h, ICONS.close)
+  table.insert(h, [[</div>
                 </div>
               </div>]])
 
-    local breadcrumbHtml = "<div class='explorer-breadcrumbs2' >" ..
-        "<span class='titleTasks'>Tasks list</span><span id='temp-message1'>update done</span><span id='temp-message2'>refresh done</span><span id='temp-message3'></span></div>"
-    table.insert(h, breadcrumbHtml)
-    table.insert(h, [[
+  local breadcrumbHtml = "<div class='explorer-breadcrumbs2' >" ..
+      "<span class='titleTasks'>Tasks list</span><span id='temp-message1'>update done</span><span id='temp-message2'>refresh done</span><span id='temp-message3'></span></div>"
+  table.insert(h, breadcrumbHtml)
+  table.insert(h, [[
               </div>]])
 
-    local gridClass = "document-explorer document-explorer2"
-    table.insert(h, [[<div class="]] .. gridClass .. [[" id="explorerGrid" "]])
-    table.insert(h, [[">]])
+  local gridClass = "document-explorer document-explorer2"
+  table.insert(h, [[<div class="]] .. gridClass .. [[" id="explorerGrid" "]])
+  table.insert(h, [[">]])
 
-    -- ---------- DRAW | HTML INJECTION ----------
-    -- 1) switch content of h into h2
-    local h2 = {}
-    for i = 1, #h do
-        h2[i] = h[i]
-    end
+  -- ---------- HTML ----------
+  -- 1) switch content of h into h2
+  local h2 = {}
+  for i = 1, #h do
+    h2[i] = h[i]
+  end
 
-    -- 2) add html provided by tasksByPage
-    local stadeInit = js.window.sessionStorage.getItem("searchInit");
-    if stadeInit == "true" then
-        clauseWhere = WHERE_INIT
-        js.window.sessionStorage.setItem("searchInit", "false");
-    else
-        clauseWhere = clauseWhere or ""
-    end
-    stadeInit = js.window.sessionStorage.getItem("searchInit");
-    local listVar = tasksByPage(allTasks, viewMode, clauseWhere)
-    if some(listVar) == nil then return end
+  -- 2) add html provided by tasksByPage
+  local stadeInit = js.window.sessionStorage.getItem("searchInit");
+  if stadeInit == "true" then
+    clauseWhere = WHERE_INIT
+    js.window.sessionStorage.setItem("searchInit", "false");
+    js.window.sessionStorage.setItem("searchTerm", WHERE_INIT)
+  else
+    clauseWhere = clauseWhere or ""
+    --js.window.sessionStorage.setItem("searchTerm", clauseWhere)
+  end
+  local listVar = tasksByPage(allTasks, viewMode, clauseWhere)
+  if some(listVar) == nil then return end
 
-    -- 3) -- Write query to history file
+  -- 3) -- Write query to history file (except at startup)
+  if stadeInit == "true" then
+    stadeInit = "false"
+  else
     if clauseWhere ~= "" then writeToHistory(clauseWhere) end
+  end
 
-    -- 4) feedback
-    local addHtml = listVar[1]
-    table.insert(h2, addHtml)
-    table.insert(h2, "</div>")
-    local nbTasks = listVar[2]
-    local lib = " " -- (nbTasks > 1 and " tasks " or " task ")
-    local finalHtml = table.concat(h2)
-    finalHtml = finalHtml:gsub("<span id='temp%-message3'></span>",
-        "<span id='temp-message3'> " .. nbTasks .. lib .. "displayed of " .. nbTasks .. lib .. "extracted</span>")
+  -- 4) feedback
+  local addHtml = listVar[1]
+  table.insert(h2, addHtml)
+  table.insert(h2, "</div>")
+  local nbTasks = listVar[2]
+  local lib = " "   -- (nbTasks > 1 and " tasks " or " task ")
+  local finalHtml = table.concat(h2)
+  finalHtml = finalHtml:gsub("<span id='temp%-message3'></span>",
+    "<span id='temp-message3'> " .. nbTasks .. lib .. "displayed of " .. nbTasks .. lib .. "extracted</span>")
 
-    -- ---------- DRAW | SCRIPT JS ----------
-    local script = [[
-(function() {
-  ]]
-    -- Show a message when Draw() is finished
-    if seeMess ~= "" and seeMess ~= nil and seeMess ~= false then
-        if seeMess == "maj" then
-            script = script .. [[
+  -- ---------- JS SCRIPT ----------
+  local script = [[
+
+    (function() {
+      // ----------- 1- Hide panel while waiting for styles to fully load (Promise) ------------
+      const panel = parent.document.querySelector('.sb-panel.]] .. PANEL_ID .. [[');
+      if (panel) panel.style.visibility = 'hidden';
+    })();
+
+    (function() {
+    // ------------- 2- Show a message when Draw() is finished -------------
+    ]]
+  if seeMess ~= "" and seeMess ~= nil and seeMess ~= false then
+    if seeMess == "maj" then
+      script = script .. [[
         setTimeout(function() {
           document.getElementById('temp-message1').style.display = 'none';
           document.getElementById('temp-message2').style.display = 'inline';]]
-        else
-            script = script .. [[
+    else
+      script = script .. [[
         setTimeout(function() {
           document.getElementById('temp-message2').style.display = 'none';
           document.getElementById('temp-message1').style.display = 'inline';]]
-        end
-        script = script .. [[
+    end
+    script = script .. [[
           setTimeout(function() {
             document.getElementById('temp-message1').style.display = 'none';
             document.getElementById('temp-message2').style.display = 'none';
           }, 1300);
         }, 100);
       ]]
-    end
+  end
 
-    script = script .. [[
-  // 1) Miscellaneous
+  script = script .. [[
+    // ---------------- 3- Load Styles Once then reveal panel ----------------
+
+    function ensureElement(id, tag, attributes, content) {
+        if (document.getElementById(id)) return document.getElementById(id);
+        const el = document.createElement(tag);
+        el.id = id;
+        for (let key in attributes) el.setAttribute(key, attributes[key]);
+        if (content) el.innerHTML = content;
+        document.head.appendChild(el);
+        return el;
+    }
+
+    const mainCss = ensureElement("silverbullet-main-css", "link", { rel: "stylesheet", href: "/.client/main.css"});
+    const explorerCss = ensureElement("explorer-style-css",    "link", { rel: "stylesheet", href: "/.fs/Library/baudogit/taskex_styles.css" });
+
+    if (!document.getElementById("explorer-custom-styles-once")) {
+        const parentStyles = parent.document.getElementById("custom-styles")?.innerHTML || "";
+        const cleanStyles = parentStyles.replace(/<\/?style>/g, "");
+        const styleEl = document.createElement("style");
+        styleEl.id = "explorer-custom-styles-once";
+        styleEl.innerHTML = cleanStyles;
+        document.head.appendChild(styleEl);
+    }
+
+    // Utilisation du pattern SilverBullet avec Promise.withResolvers
+    function onStyleLoaded(el, timeoutMs = 5000) {
+        const { promise, resolve, reject } = Promise.withResolvers();
+
+        // Vérification immédiate
+        if (el.sheet) {
+            resolve();
+            return promise;
+        }
+
+        // Timeout pour éviter les blocages
+        const timeout = setTimeout(() => {
+            reject(new Error(`CSS loading timeout: ${el.href}`));
+        }, timeoutMs);
+
+        const cleanup = () => clearTimeout(timeout);
+
+        el.addEventListener('load', () => {
+            cleanup();
+            resolve();
+        }, { once: true });
+
+        el.addEventListener('error', (e) => {
+            cleanup();
+            reject(e);
+        }, { once: true });
+
+        return promise;
+    }
+
+    // Pattern avec gestion d'erreurs et communication SilverBullet
+    Promise.allSettled([
+        onStyleLoaded(mainCss),
+        onStyleLoaded(explorerCss)
+    ]).then(results => {
+        const failures = results.filter(r => r.status === 'rejected');
+        if (failures.length > 0) {
+            console.warn('Some CSS failed to load:', failures);
+        }
+
+        // Utiliser requestAnimationFrame pour les changements de style
+        requestAnimationFrame(() => {
+            document.documentElement.style.visibility = '';
+
+        // Révéler aussi le panneau parent
+        const panel = parent.document.querySelector('.sb-panel.]] .. PANEL_ID .. [[');
+        if (panel) panel.style.visibility = '';
+        });
+    }).catch(error => {
+        console.error('Critical error loading styles:', error);
+        // Fallback : révéler quand même
+        document.documentElement.style.visibility = '';
+    });
+
+  })();
 
 (function () {
-  // ============================================
-  // BRANCHEMENT DES BOUTONS DE LA ZONE DE RECHERCHE
-  // (à suspendre, car incompatible avec les menus)
-  // ============================================
-  function initBouton() {
-
-    // Clear filter
-    const buttonClear = document.getElementById('clearSearch');
-    if (buttonClear) {
-        buttonClear.addEventListener('mousedown', function () {
-            document.getElementById("tileSearch").value = "";
-            applySearchFilter("");
-        });
-    }
-
-    // Execute query
-    const buttonGo = document.getElementById('goSearch');
-    if (buttonGo) {
-      buttonGo.addEventListener('mousedown', function () {
-        // Simuler l'appui sur Enter sur le champ de recherche
-        const enterEvent = new KeyboardEvent('keydown', {
-          key: 'Enter',
-          code: 'Enter',
-          keyCode: 13,
-          which: 13,
-          bubbles: true,
-          cancelable: true
-        });
-        // Dispatcher l'événement sur tileSearch
-        const inputSearch = document.getElementById('tileSearch');
-        inputSearch.dispatchEvent(enterEvent);
-      });
-    }
-  }
+  // --------------------- 4- Miscellaneous -----------------
 
   // ============================================
-  // VARIABLES ET CONSTANTES
+  // VARIABLES AND CONSTANTS
   // ============================================
    const shouldRestore = sessionStorage.getItem("shouldRestore");
   if (shouldRestore === "true") {
@@ -676,7 +908,7 @@ local function drawPanel(seeMess, clauseWhere)
   })();
 
   // ============================================
-  // FONCTION DE MISE A JOUR D'UNE TÂCHE
+  // UPDATE THE STATUS OF A TASK
   // ============================================
   window.toggleTask = function (namePage, positionStart, done, status) {
     const taskId = namePage + "@" + (positionStart - 2);
@@ -695,9 +927,9 @@ local function drawPanel(seeMess, clauseWhere)
     ]);
   };
 
-  // Positionner la ligne mise à jour en haut de la liste
-  // (fonction ,déclenchée par l'initialisation du script js de Draw,
-  // lequel est lancé par toggleTaskRemote() via Task: Toggle_Done)
+  // La ligne mise à jour est positionnée en haut de la liste
+  // (fonction activée lors de l'initialisation de Draw, lui-même
+  // lancé par toggleTaskRemote via "Task: Toggle_Done")
   function restoreScrollPosition() {
     const shouldRestore = sessionStorage.getItem("shouldRestore");
 
@@ -728,16 +960,16 @@ local function drawPanel(seeMess, clauseWhere)
   }
 
   // !!!============================================
-  // FONCTION DE FILTRAGE MULTI-CHAÎNES
+  // MULTI-CHAIN FILTERING
   // ============================================
   function applySearchFilter(searchTermFilter) {
     searchTermFilter = searchTermFilter.trim();
     const allTasks = document.querySelectorAll(".sb-TaskExplorer-div-task");
 
-    // Parser les termes de recherche avec support des crochets, guillemets et opérateur +
+    // Parse search terms with support for brackets, quotes and + operator
     const orGroups = parseSearchTerms(searchTermFilter);
 
-    // Filtrer les tâches
+    // Filter tasks
     let nbTasks = 0;
     allTasks.forEach(function (task) {
       const labelDiv = task.querySelector("#divTaskchild");
@@ -745,13 +977,13 @@ local function drawPanel(seeMess, clauseWhere)
       if (labelDiv) {
         const labelText = labelDiv.textContent;
 
-        // Si aucun terme de recherche, tout afficher
+        // If no search term, show all
         if (orGroups.length === 0) {
           task.style.display = "";
         } else {
-          // Vérifier qu'au moins un groupe (OU) est satisfait
+          // Check that at least one group (OU) is satisfied
           const anyGroupMatches = orGroups.some(function (andGroup) {
-            // Pour qu'un groupe soit satisfait, tous ses termes (ET) doivent être trouvés
+            // For a group to be satisfied, all its terms (AND) must be found
             return andGroup.every(function (term) {
               return matchTerm(term, labelText);
             });
@@ -771,7 +1003,7 @@ local function drawPanel(seeMess, clauseWhere)
     let lib = "";
     if (nbTasks > 1) {lib = " tasks ";} else {lib = " task ";}
     span.textContent = nbTasks + lib + span.textContent.substring(displayedIndex);
-    // Masquer les titres de page sans tâches visibles
+    // Hide page titles without visible stains
     const allPageHeaders = document.querySelectorAll(
       ".sb-TaskExplorer-div-page",
     );
@@ -798,10 +1030,10 @@ local function drawPanel(seeMess, clauseWhere)
   }
 
   // ============================================
-  // FONCTION DE PARSING DES TERMES DE RECHERCHE
+  // PARSING SEARCH TERMS
   // ============================================
   function parseSearchTerms(searchTermFilter) {
-    // D'abord, séparer par espaces pour identifier les groupes ET (reliés par +)
+    // First, separate by spaces to identify AND groups (connected by +)
     const orGroups = [];
     let currentGroup = [];
     let i = 0;
@@ -809,9 +1041,9 @@ local function drawPanel(seeMess, clauseWhere)
     while (i < searchTermFilter.length) {
       const char = searchTermFilter[i];
 
-      // Ignorer les espaces au début
+      // Iignore spaces at the beginning
       if (char === ' ') {
-        // Si on a un groupe en cours, on le termine (opérateur OU)
+        // If we have a group in progress, we end it (OR operator)
         if (currentGroup.length > 0) {
           orGroups.push(currentGroup);
           currentGroup = [];
@@ -820,16 +1052,16 @@ local function drawPanel(seeMess, clauseWhere)
         continue;
       }
 
-      // Opérateur + : continue le groupe actuel (opérateur ET)
+      // Operator +: continues the current group (AND operator)
       if (char === '+') {
         i++;
         continue;
       }
 
-      // Parser un terme
+      // Parse a term
       const term = parseSingleTerm(searchTermFilter, i);
       if (term) {
-        // N'ajouter que les termes valides (non null)
+        // Add only valid (non-null) terms
         if (term.term !== null) {
           currentGroup.push(term.term);
         }
@@ -839,7 +1071,7 @@ local function drawPanel(seeMess, clauseWhere)
       }
     }
 
-    // Ajouter le dernier groupe s'il existe
+    // Add the last group if it exists
     if (currentGroup.length > 0) {
       orGroups.push(currentGroup);
     }
@@ -848,13 +1080,13 @@ local function drawPanel(seeMess, clauseWhere)
   }
 
   // ============================================
-  // PARSER UN TERME UNIQUE
+  // PARSING A SINGLE TERM
   // ============================================
   function parseSingleTerm(searchTermFilter, startIndex) {
     let i = startIndex;
     const char = searchTermFilter[i];
 
-    // Bloc entre crochets [...]
+    // Block in square brackets [...]
     if (char === '[') {
       const closingIndex = searchTermFilter.indexOf(']', i);
       if (closingIndex !== -1) {
@@ -864,12 +1096,12 @@ local function drawPanel(seeMess, clauseWhere)
           nextIndex: closingIndex + 1
         };
       } else {
-        // Pas de crochet fermant trouvé, on ignore
+        // No closing bracket found, we don't know
         return { term: null, nextIndex: i + 1 };
       }
     }
 
-    // Bloc entre guillemets doubles "..."
+    // Block in double quotes "..."
     if (char === '"') {
       const closingIndex = searchTermFilter.indexOf('"', i + 1);
       if (closingIndex !== -1) {
@@ -879,12 +1111,12 @@ local function drawPanel(seeMess, clauseWhere)
           nextIndex: closingIndex + 1
         };
       } else {
-        // Pas de guillemet fermant trouvé, on ignore
+        // No closing quote found, we ignore
         return { term: null, nextIndex: i + 1 };
       }
     }
 
-    // Bloc entre guillemets simples '...'
+    // Block in single quotes '...'
     if (char === "'") {
       const closingIndex = searchTermFilter.indexOf("'", i + 1);
       if (closingIndex !== -1) {
@@ -894,12 +1126,12 @@ local function drawPanel(seeMess, clauseWhere)
           nextIndex: closingIndex + 1
         };
       } else {
-        // Pas de guillemet fermant trouvé, on ignore
+        // No closing quote found, we ignore
         return { term: null, nextIndex: i + 1 };
       }
     }
 
-    // Mot normal (sans délimiteur spécial)
+    // Normal word (without special delimiter)
     let word = '';
     while (i < searchTermFilter.length &&
            searchTermFilter[i] !== ' ' &&
@@ -922,12 +1154,12 @@ local function drawPanel(seeMess, clauseWhere)
   }
 
   // ============================================
-  // FONCTION DE CORRESPONDANCE DES TERMES
+  // CORRESPONDENCE OF TERMS
   // ============================================
   function matchTerm(term, text) {
     if (term.type === 'bracket') {
-      // Pour les crochets : chercher la chaîne qui commence juste après un [
-      // Des caractères supplémentaires peuvent suivre, mais pas précéder
+      // For brackets: look for the string that starts just after a [
+      // Additional characters can follow, but not precede
       const bracketBlocks = [];
       let inBracket = false;
       let currentBlock = '';
@@ -951,51 +1183,64 @@ local function drawPanel(seeMess, clauseWhere)
       }
 
       const searchValue = term.value.toLowerCase();
-      // Vérifier que le bloc COMMENCE par le motif recherché
+      // Check that the block STARTS with the desired pattern
       return bracketBlocks.some(function(block) {
         return block.toLowerCase().startsWith(searchValue);
       });
     }
     else if (term.type === 'quoted') {
-      // Pour les guillemets : chercher la chaîne exacte (insensible à la casse)
+      // For quotes: search for the exact string (case insensitive)
       return text.toLowerCase().includes(term.value.toLowerCase());
     }
     else {
-      // Pour les mots normaux : chercher en mode insensible à la casse
+      // For normal words: search in case-insensitive mode
       return text.toLowerCase().includes(term.value.toLowerCase());
     }
   }
 
   // !!!============================================
-  // FONCTION DE RÉCUPÉRATION DES ATTRIBUTS
+  // RECOVERY OF ATTRIBUTES
   // ============================================
   function getUniqueAttributes() {
+
+    // Depending on SilverBullet release date
+    const dateVersion = sessionStorage.getItem("dateVersion")
+    if (dateVersion >= "2026-02-06") {
+      const attributeSpans = document.querySelectorAll(
+      ".sb-list.sb-frontmatter.sb-attribute-name",
+      );
+    } else {
+      const attributeSpans = document.querySelectorAll(
+        ".sb-list.sb-frontmatter.sb-atom",
+      );
+    }
+
     const attributeSpans = document.querySelectorAll(
-      ".sb-list.sb-frontmatter.sb-atom",
+      ".sb-list.sb-frontmatter.sb-attribute-name",
     );
     const attributeSet = new Set();
 
     attributeSpans.forEach(function (span) {
       const attributeName = span.textContent.trim();
-      // Retirer les ":" s'ils sont présents
+      // Remove ":" if present
       const cleanName = attributeName.replace(/:$/, "");
       if (cleanName) {
         attributeSet.add(cleanName);
       }
     });
 
-    // Convertir en tableau et trier alphabétiquement
+    // Convert to array and sort alphabetically
     return Array.from(attributeSet).sort(function (a, b) {
       return a.toLowerCase().localeCompare(b.toLowerCase());
     });
   }
 
   // !!!============================================
-  // FONCTION DE MENU CONTEXTUEL - VERSION DEUX MENUS
+  // CONTEXTUAL MENU
   // ============================================
 
   function createAttributeMenu() {
-    // Supprimer le menu existant s'il y en a un
+    // Delete existing menu if there is one
     const existingMenu = document.getElementById("attributeDropdownMenu");
     if (existingMenu) {
       existingMenu.remove();
@@ -1065,7 +1310,7 @@ local function drawPanel(seeMess, clauseWhere)
     const subMenu =
       document.getElementById("attributeSubMenu") || createSubMenu();
 
-    // Vider le sous-menu
+    // Clear submenu
     subMenu.innerHTML = "";
 
     items.forEach(function (item) {
@@ -1092,7 +1337,7 @@ local function drawPanel(seeMess, clauseWhere)
         const currentValue = searchInput.value;
 
         if (type === "property") {
-          // Pour les propriétés, ajouter le préfixe "_."
+          // For properties, add the prefix "_."
           let prefix = "";
           if (currentValue) {
             prefix = " and _.";
@@ -1101,13 +1346,13 @@ local function drawPanel(seeMess, clauseWhere)
           }
           searchInput.value = currentValue + prefix + item + "==' '";
         } else if (type === "example") {
-          // Pour les exemples, coller moins les 5 premiers caractères
+          // For examples, paste minus the first 5 characters
           searchInput.value = currentValue + item.substring(5);
         } else if (type === "history") {
-          // Pour l'historique, coller moins les 5 premiers caractères
+          // For history, paste minus the first 5 characters
           searchInput.value = currentValue + item.substring(5);
         } else if (type === "attribute") {
-          // Pour les attributs
+          // For attributes
           let prefix = "";
           if (searchMode === "list") {
             prefix = currentValue && !currentValue.endsWith(" ") ? " [" : "[";
@@ -1125,19 +1370,22 @@ local function drawPanel(seeMess, clauseWhere)
           if (searchMode === "list") {
             applySearchFilter(searchInput.value);
           }
+        } else if (type === "attribute_update") {
+          // For update mode, just insert the attribute name
+          searchInput.value = item;
         }
 
-        // Garder le menu ouvert et replacer le focus
+        // Keep the menu open and return the focus
         searchInput.focus();
 
-        // Fermer uniquement le sous-menu
+        // Close submenu only
         hideSubMenu();
       });
 
       subMenu.appendChild(itemDiv);
     });
 
-    // Positionner le sous-menu à droite de l'item parent
+    // Position the submenu to the right of the parent item
     const rect = parentItem.getBoundingClientRect();
     subMenu.style.left = rect.right + 5 + "px";
     subMenu.style.top = rect.top + "px";
@@ -1145,7 +1393,7 @@ local function drawPanel(seeMess, clauseWhere)
   }
 
   // !!!============================================
-  // MENU MODE LISTE
+  // FILTER MODE MENU
   // ============================================
 
   function showListeModeMenu(searchInput) {
@@ -1153,22 +1401,85 @@ local function drawPanel(seeMess, clauseWhere)
       document.getElementById("attributeDropdownMenu") || createAttributeMenu();
     const attributes = getUniqueAttributes();
 
-    // Vider le menu
+    // Clear menu
     menu.innerHTML = "";
 
-    // Titre du mode (optionnel)
+ // Title with 3 mode buttons
     const modeTitle = document.createElement("div");
-    modeTitle.textContent = "Filter mode";
     modeTitle.style.cssText = `
-      padding: 8px 12px;
-      font-weight: bold;
+      padding: 6px 8px;
       background-color: #f5f5f5;
       border-bottom: 1px solid #ddd;
-      color: #333;
+      display: flex;
+      gap: 6px;
     `;
+    
+    // Filter button (active)
+    const filterBtn = document.createElement("button");
+    filterBtn.id = "listMode";
+    filterBtn.textContent = "Filter";
+    filterBtn.style.cssText = `
+      padding: 4px 12px;
+      border: 1px solid #28a745;
+      background-color: #28a745;
+      color: white;
+      border-radius: 3px;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 600;
+    `;
+    filterBtn.class='.mode-switcher div';
+    filterBtn.onclick = function(e) {
+      e.stopPropagation();
+      window.switchSearchMode("list", searchInput);
+    };
+    
+    // Query button (inactive)
+    const queryBtn = document.createElement("button");
+    queryBtn.id = "whereMode";
+    queryBtn.textContent = "Query";
+    queryBtn.style.cssText = `
+      padding: 4px 12px;
+      border: 1px solid #ccc;
+      background-color: white;
+      color: #333;
+      border-radius: 3px;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 500;
+    `;
+    queryBtn.class='.mode-switcher div';
+    queryBtn.onclick = function(e) {
+      e.stopPropagation();
+      window.switchSearchMode("where", searchInput);
+    };
+    
+    // Update button (inactive)
+    const updateBtn = document.createElement("button");
+    updateBtn.id = "updateMode";
+    updateBtn.textContent = "Update";
+    updateBtn.style.cssText = `
+      padding: 4px 12px;
+      border: 1px solid #ccc;
+      background-color: white;
+      color: #333;
+      border-radius: 3px;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 500;
+    `;
+    updateBtn.class='.mode-switcher div';
+    updateBtn.onclick = function(e) {
+      e.stopPropagation();
+      window.switchSearchMode("update", searchInput);
+    };
+    
+    modeTitle.appendChild(filterBtn);
+    modeTitle.appendChild(queryBtn);
+    modeTitle.appendChild(updateBtn);
     menu.appendChild(modeTitle);
 
-    // Item Attributs avec sous-menu
+    // Item Attributes with submenu
     const attributesItem = document.createElement("div");
     attributesItem.textContent = "Attributs >";
     attributesItem.style.cssText = `
@@ -1193,7 +1504,7 @@ local function drawPanel(seeMess, clauseWhere)
 
     menu.appendChild(attributesItem);
 
-    // Positionner le menu sous le champ de recherche
+    // Position the menu below the search field
     const rect = searchInput.getBoundingClientRect();
     menu.style.left = rect.left + "px";
     menu.style.top = rect.bottom + 2 + "px";
@@ -1202,7 +1513,7 @@ local function drawPanel(seeMess, clauseWhere)
   }
 
   // !!!============================================
-  // MENU MODE WHERE
+  // QUERY MENU (= WHERE MODE)
   // ============================================
 
   function showWhereModeMenu(searchInput) {
@@ -1210,22 +1521,85 @@ local function drawPanel(seeMess, clauseWhere)
       document.getElementById("attributeDropdownMenu") || createAttributeMenu();
     const attributes = getUniqueAttributes();
 
-    // Vider le menu
+    // Clear menu
     menu.innerHTML = "";
 
-    // Titre du mode (optionnel)
+    // Title with 3 mode buttons
     const modeTitle = document.createElement("div");
-    modeTitle.textContent = "Query mode";
     modeTitle.style.cssText = `
-      padding: 8px 12px;
-      font-weight: bold;
+      padding: 6px 8px;
       background-color: #f5f5f5;
       border-bottom: 1px solid #ddd;
-      color: #333;
+      display: flex;
+      gap: 6px;
     `;
+    
+    // Filter button (inactive)
+    const filterBtn = document.createElement("button");
+    filterBtn.id = "listMode";
+    filterBtn.textContent = "Filter";
+    filterBtn.style.cssText = `
+      padding: 4px 12px;
+      border: 1px solid #ccc;
+      background-color: white;
+      color: #333;
+      border-radius: 3px;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 500;
+    `;
+    filterBtn.class='.mode-switcher div';
+    filterBtn.onclick = function(e) {
+      e.stopPropagation();
+      window.switchSearchMode("list", searchInput);
+    };
+    
+    // Query button (active)
+    const queryBtn = document.createElement("button");
+    queryBtn.id = "whereMode";
+    queryBtn.textContent = "Query";
+    queryBtn.style.cssText = `
+      padding: 4px 12px;
+      border: 1px solid #17a2b8;
+      background-color: #17a2b8;
+      color: white;
+      border-radius: 3px;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 600;
+    `;
+    queryBtn.class='.mode-switcher div';
+    queryBtn.onclick = function(e) {
+      e.stopPropagation();
+      window.switchSearchMode("where", searchInput);
+    };
+    
+    // Update button (inactive)
+    const updateBtn = document.createElement("button");
+    updateBtn.id = "updateMode";
+    updateBtn.textContent = "Update";
+    updateBtn.style.cssText = `
+      padding: 4px 12px;
+      border: 1px solid #ccc;
+      background-color: white;
+      color: #333;
+      border-radius: 3px;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 500;
+    `;
+    updateBtn.class='.mode-switcher div';
+    updateBtn.onclick = function(e) {
+      e.stopPropagation();
+      window.switchSearchMode("update", searchInput);
+    };
+    
+    modeTitle.appendChild(filterBtn);
+    modeTitle.appendChild(queryBtn);
+    modeTitle.appendChild(updateBtn);
     menu.appendChild(modeTitle);
 
-    // Item Attributs
+    // Item Attributes
     const attributesItem = document.createElement("div");
     attributesItem.textContent = "Attributs >";
     attributesItem.style.cssText = `
@@ -1250,7 +1624,7 @@ local function drawPanel(seeMess, clauseWhere)
 
     menu.appendChild(attributesItem);
 
-    // Item Propriétés
+    // Item Properties
     const propItem = document.createElement("div");
     propItem.textContent = "Propriétés >";
     propItem.style.cssText = `
@@ -1271,27 +1645,15 @@ local function drawPanel(seeMess, clauseWhere)
 
     menu.appendChild(propItem);
 
-    // Item Exemples
-    const exampleItem = document.createElement("div");
-    exampleItem.textContent = "Exemples >";
-    exampleItem.style.cssText = `
-      padding: 6px 12px;
-      cursor: pointer;
-      transition: background-color 0.2s;
-      color: blue;
+    // Separator
+    const separator = document.createElement("div");
+    separator.style.cssText = `
+      height: 1px;
+      background-color: #ccc;
+      margin: 4px 0;
     `;
-
-    exampleItem.addEventListener("mouseenter", function () {
-      this.style.backgroundColor = "#f0f0f0";
-      showSubMenu(this, examples, "example", searchInput);
-    });
-
-    exampleItem.addEventListener("mouseleave", function () {
-      this.style.backgroundColor = "";
-    });
-
-    menu.appendChild(exampleItem);
-
+    menu.appendChild(separator);  
+  
     // Item History
     const historyItem = document.createElement("div");
     historyItem.textContent = "History >";
@@ -1313,7 +1675,28 @@ local function drawPanel(seeMess, clauseWhere)
 
     menu.appendChild(historyItem);
 
-    // Positionner le menu sous le champ de recherche
+      // Item Examples
+    const exampleItem = document.createElement("div");
+    exampleItem.textContent = "Exemples >";
+    exampleItem.style.cssText = `
+      padding: 6px 12px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+      color: blue;
+    `;
+
+    exampleItem.addEventListener("mouseenter", function () {
+      this.style.backgroundColor = "#f0f0f0";
+      showSubMenu(this, examples, "example", searchInput);
+    });
+
+    exampleItem.addEventListener("mouseleave", function () {
+      this.style.backgroundColor = "";
+    });
+
+    menu.appendChild(exampleItem);
+
+    // Position the menu below the search field
     const rect = searchInput.getBoundingClientRect();
     menu.style.left = rect.left + "px";
     menu.style.top = rect.bottom + 2 + "px";
@@ -1322,32 +1705,151 @@ local function drawPanel(seeMess, clauseWhere)
   }
 
   // !!!============================================
-  // FONCTION GÉNÉRIQUE POUR AFFICHER LE BON MENU
+  // UPDATE MENU
   // ============================================
+
+  function showUpdateModeMenu(searchInput) {
+    const menu =
+      document.getElementById("attributeDropdownMenu") || createAttributeMenu();
+    const attributes = getUniqueAttributes();
+
+    // Clear menu
+    menu.innerHTML = "";
+
+    // Title with 3 mode buttons
+    const modeTitle = document.createElement("div");
+    modeTitle.style.cssText = `
+      padding: 6px 8px;
+      background-color: #f5f5f5;
+      border-bottom: 1px solid #ddd;
+      display: flex;
+      gap: 6px;
+    `;
+    
+    // Filter button (inactive)
+    const filterBtn = document.createElement("button");
+    filterBtn.id = "listMode";
+    filterBtn.textContent = "Filter";
+    filterBtn.style.cssText = `
+      padding: 4px 12px;
+      border: 1px solid #ccc;
+      background-color: white;
+      color: #333;
+      border-radius: 3px;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 500;
+    `;
+    filterBtn.class='.mode-switcher div';
+    filterBtn.onclick = function(e) {
+      e.stopPropagation();
+      window.switchSearchMode("list", searchInput);
+    };
+    
+    // Query button (inactive)
+    const queryBtn = document.createElement("button");
+    queryBtn.id = "whereMode";
+    queryBtn.textContent = "Query";
+    queryBtn.style.cssText = `
+      padding: 4px 12px;
+      border: 1px solid #ccc;
+      background-color: white;
+      color: #333;
+      border-radius: 3px;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 500;
+    `;
+    queryBtn.class='.mode-switcher div';
+    queryBtn.onclick = function(e) {
+      e.stopPropagation();
+      window.switchSearchMode("where", searchInput);
+    };
+    
+    // Update button (active)
+    const updateBtn = document.createElement("button");
+    updateBtn.id = "updateMode";
+    updateBtn.textContent = "Update";
+    updateBtn.style.cssText = `
+      padding: 4px 12px;
+      border: 1px solid #ffc107;
+      background-color: #ffc107;
+      color: #000;
+      border-radius: 3px;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 600;
+    `;
+    updateBtn.class='.mode-switcher div';
+    updateBtn.onclick = function(e) {
+      e.stopPropagation();
+      window.switchSearchMode("update", searchInput);
+    };
+    
+    modeTitle.appendChild(filterBtn);
+    modeTitle.appendChild(queryBtn);
+    modeTitle.appendChild(updateBtn);
+    menu.appendChild(modeTitle);
+
+    // Item Attributes with submenu
+    const attributesItem = document.createElement("div");
+    attributesItem.textContent = "Attributs >";
+    attributesItem.style.cssText = `
+      padding: 6px 12px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+      color: blue;
+    `;
+
+    attributesItem.addEventListener("mouseenter", function () {
+      this.style.backgroundColor = "#f0f0f0";
+      showSubMenu(this, attributes, "attribute_update", searchInput);
+    });
+
+    attributesItem.addEventListener("mouseleave", function () {
+      this.style.backgroundColor = "";
+    });
+
+    menu.appendChild(attributesItem);
+
+    // Position and display the menu
+    const rect = searchInput.getBoundingClientRect();
+    menu.style.left = rect.left + "px";
+    menu.style.top = rect.bottom + 2 + "px";
+    menu.style.width = rect.width / 2 + "px";
+    menu.style.display = "block";
+  }
+
+  // !!!============================================
+  // GENERIC FUNCTION TO DISPLAY THE CORRECT MENU
+  // ==============================================
 
   function showMenuForCurrentMode(searchInput) {
     if (searchMode === "list") {
       showListeModeMenu(searchInput);
     } else if (searchMode === "where") {
       showWhereModeMenu(searchInput);
+    } else if (searchMode === "update") {
+      showUpdateModeMenu(searchInput);
     }
   }
 
   // !!!============================================
-  // FONCTION APPELÉE PAR LE BOUTON D'OPTION
+  // FUNCTION CALLED BY THE OPTION BUTTON
   // ============================================
 
   /**
-   * Cette fonction est appelée depuis l'interface HTML
-   * lorsque l'utilisateur change de mode
+   * This function is called from the HTML interface
+   * when user changes mode
    *
    * @param {string} mode - "list" ou "where"
-   * @param {HTMLElement} searchInput - l'élément input de recherche
+   * @param {HTMLElement} searchInput - the search input element
    */
 
   window.switchSearchMode = function(mode, searchInput) {
+    hideSubMenu();
     searchMode = mode;
-    // Visuel
+    // Visual
     const inputSearchZone = document.querySelector('#tileSearch');
     document.querySelectorAll('.mode-switcher div').forEach(el => el.classList.remove('active'));
     if (mode === "list") {
@@ -1356,7 +1858,7 @@ local function drawPanel(seeMess, clauseWhere)
       const btn = document.querySelector('#listMode');
       btn.classList.add('active');
       btn.title = "Filter mode : ";
-      inputSearchZone.placeholder = "\u00A0\u00A0\u00A0\u00A0...\u00A0\u00A0 real-time filter (Esc to exit)";
+      inputSearchZone.placeholder = "\u00A0\u00A0\u00A0\u00A0...\u00A0\u00A0 real-time execution (Esc to exit)";
       searchInput.style.backgroundColor = "white";
       applySearchFilter("");
     } else if (mode === "where") {
@@ -1365,30 +1867,38 @@ local function drawPanel(seeMess, clauseWhere)
       const btn = document.querySelector('#whereMode');
       btn.classList.add('active');
       btn.title = "Where : " + sessionStorage.getItem("searchTerm");
-      inputSearchZone.placeholder = "\u00A0\u00A0\u00A0\u00A0...\u00A0\u00A0 clause where (query with Enter or Esc to exit)";
+      inputSearchZone.placeholder = "\u00A0\u00A0\u00A0\u00A0...\u00A0\u00A0 custom clause where (Enter to execute)";
       searchInput.style.backgroundColor = "#F2F7FF";
+    } else if (mode === "update") {
+      searchInput.value = "";
+      sessionStorage.setItem("searchMode", "update");
+      const btn = document.querySelector('#updateMode');
+      btn.classList.add('active');
+      btn.title = "Update attributes";
+      inputSearchZone.placeholder = "\u00A0\u00A0\u00A0\u00A0...\u00A0\u00A0 add:name[=value] | delete:name | rename:old->new (Enter to execute)";
+      searchInput.style.backgroundColor = "#FFF8E1";
     }
 
-    // Donner le focus au champ de recherche
+    // Give focus to the search field
     searchInput.focus();
-    // Afficher le menu correspondant
+    // Show corresponding menu
     showMenuForCurrentMode(searchInput);
   }
 
   // !!!============================================
-  // GESTION DES ÉVÉNEMENTS
+  // EVENT MANAGEMENT
   // ============================================
 
   function initializeSearchMenu(searchInput) {
 
-    // Afficher le menu lors du focus
+    // Show menu when focused
     searchInput.addEventListener('focus', function(e) {
       setTimeout(function() {
         showMenuForCurrentMode(searchInput);
       }, 50);
     });
 
-    // Gérer la perte de focus
+    // Managing loss of focus
     searchInput.addEventListener('blur', function(e) {
       const menu = document.getElementById("attributeDropdownMenu");
       const subMenu = document.getElementById("attributeSubMenu");
@@ -1403,7 +1913,7 @@ local function drawPanel(seeMess, clauseWhere)
       }, 200);
     });
 
-    // Empêcher la fermeture lors des clics sur le menu
+    // Prevent closing on menu clicks
     document.addEventListener('mousedown', function(e) {
       const menu = document.getElementById("attributeDropdownMenu");
       const subMenu = document.getElementById("attributeSubMenu");
@@ -1416,7 +1926,7 @@ local function drawPanel(seeMess, clauseWhere)
       }
     });
 
-    // Afficher le menu au clic droit
+    // Show right-click menu
     searchInput.addEventListener("contextmenu", function (e) {
       e.preventDefault();
       setTimeout(function() {
@@ -1424,7 +1934,7 @@ local function drawPanel(seeMess, clauseWhere)
       }, 50);
     });
 
-    // Fermer le menu lors du clic en dehors
+    // Close menu when clicking outside
     document.addEventListener('click', function(e) {
       const menu = document.getElementById("attributeDropdownMenu");
       const subMenu = document.getElementById("attributeSubMenu");
@@ -1435,9 +1945,9 @@ local function drawPanel(seeMess, clauseWhere)
       }
     });
 
-    // Écouter les changements
+    // Listen for changes
     searchInput.addEventListener("input", function () {
-      // Appliquer le filtre seulement en mode liste
+      // Apply filter only in list mode
       if (searchMode === "list") {
         applySearchFilter(this.value);
         sessionStorage.setItem("searchTermFilter", this.value);
@@ -1448,7 +1958,7 @@ local function drawPanel(seeMess, clauseWhere)
       }
     });
 
-    // Gestion des touches clavier
+    // Keyboard key management
     searchInput.addEventListener("keydown", function (e) {
       if (e.key === "Enter") {
         e.preventDefault();
@@ -1468,11 +1978,17 @@ local function drawPanel(seeMess, clauseWhere)
             newWhere,
           ]);
         } else if (searchMode === "list") {
-          // En mode liste, Entrée applique simplement le filtre
+          // In list view, Enter simply applies the filter
           sessionStorage.setItem("searchTermFilter", this.value);
           const btn = document.querySelector('#listMode');
           btn.title = "Filter mode : " + this.value;
           applySearchFilter(this.value);
+        } else if (searchMode === "update") {
+          // In update mode, execute the command
+          const command = this.value.trim();
+          if (command) {
+            executeAttributeUpdate(command);
+          }
         }
       } else if (e.key === "Escape") {
         e.preventDefault();
@@ -1485,9 +2001,9 @@ local function drawPanel(seeMess, clauseWhere)
       }
     });
 
-    // Gestion du Coller
+    // Paste Management
     searchInput.addEventListener("paste", function () {
-      // Appliquer le filtre seulement en mode liste
+      // Apply filter only in list mode
       if (searchMode === "list") {
         applySearchFilter(this.value);
         sessionStorage.setItem("searchTermFilter", this.value);
@@ -1498,9 +2014,9 @@ local function drawPanel(seeMess, clauseWhere)
       }
     });
 
-    // Evènements supplémentaires pour détecter les changements programmatiques
+    // Additional events to detect programmatic changes
     searchInput.addEventListener("change", function () {
-      // Appliquer le filtre seulement en mode liste
+      // Apply filter only in filter mode
       if (searchMode === "list") {
         applySearchFilter(this.value);
         sessionStorage.setItem("searchTermFilter", this.value);
@@ -1511,6 +2027,194 @@ local function drawPanel(seeMess, clauseWhere)
       }
     });
   }
+
+  // !!!============================================
+  // TASKS COLLECT FOR UPDATE MODE
+  // ============================================
+
+  function getVisibleTaskIds() {
+    const taskDivs = document.querySelectorAll('.sb-TaskExplorer-div-task');
+    const taskIds = [];
+    taskDivs.forEach(function(div) {
+      if (window.getComputedStyle(div).display !== 'none') {
+        const taskId = div.getAttribute('data-task-id');
+        if (taskId) {
+          taskIds.push(taskId);
+        }
+      }
+    });
+    return taskIds;
+  }
+
+  async function executeAttributeUpdate(command) {
+    // Parser: "add:priority=high" or "delete:tag" or "rename:old->new"
+    const colonIndex = command.indexOf(':');
+    if (colonIndex === -1) {
+      await syscall('editor.flashNotification', 'Invalid syntax. Use: add:name[=value] | delete:name | rename:old->new');
+      return;
+    }
+
+    const action = command.substring(0, colonIndex).trim();
+    const details = command.substring(colonIndex + 1).trim();
+
+    if (!['add', 'delete', 'rename'].includes(action)) {
+      await syscall('editor.flashNotification', 'Invalid action. Use: add, delete, or rename');
+      return;
+    }
+
+    const taskIds = getVisibleTaskIds();
+    if (taskIds.length === 0) {
+      await syscall('editor.flashNotification', 'No tasks visible');
+      return;
+    }
+
+    let attrName = '';
+    let newValue = '';
+
+    if (action === 'add') {
+      const equalIndex = details.indexOf('=');
+      if (equalIndex === -1) {
+        attrName = details;
+        newValue = '';
+      } else {
+        attrName = details.substring(0, equalIndex).trim();
+        newValue = details.substring(equalIndex + 1).trim();
+      }
+    } else if (action === 'rename') {
+      const arrowIndex = details.indexOf('->');
+      if (arrowIndex === -1) {
+        await syscall('editor.flashNotification', 'Invalid rename syntax. Use: rename:old->new');
+        return;
+      }
+      attrName = details.substring(0, arrowIndex).trim();
+      newValue = details.substring(arrowIndex + 2).trim();
+    } else {
+      attrName = details;
+    }
+
+    if (!attrName) {
+      await syscall('editor.flashNotification', 'Attribute name required');
+      return;
+    }
+
+    // Run Lua command
+    const taskIdsJson = JSON.stringify(taskIds);
+    await syscall("editor.invokeCommand", "TaskExplorer: UpdateAttributes", [
+        taskIds,
+        action,
+        attrName,
+        newValue
+    ]);
+  }
+
+  // !!!============================================
+  // CONFIRMATION MODAL WITH LOG
+  // ============================================
+  parent.window.showUpdateConfirmationModal = function(logText, confirmationMessage, callId) {
+
+      // Create the HTML of the modal
+      const modalHTML = `
+        <div id="updateConfirmModal" style="
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background-color: rgba(0, 0, 0, 0.5);
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          z-index: 10000;
+        ">
+          <div style="
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            max-width: 600px;
+            max-height: 80vh;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+          ">
+            <h3 style="margin: 0 0 15px 0; color: #333;">Update Confirmation</h3>
+
+            <pre style="
+              background: #f5f5f5;
+              padding: 15px;
+              border-radius: 4px;
+              overflow-y: auto;
+              max-height: 50vh;
+              margin: 0 0 15px 0;
+              font-family: monospace;
+              font-size: 13px;
+              line-height: 1.4;
+            ">${logText}</pre>
+
+            <div style="
+              /*font-weight: bold;*/
+              margin-bottom: 20px;
+              color: #d97706;
+            ">${confirmationMessage}</div>
+
+            <div style="
+              display: flex;
+              gap: 10px;
+              justify-content: flex-end;
+            ">
+              <button autofocus type="button" id="modalCancel" style="
+                padding: 8px 20px;
+                border: 1px solid #ccc;
+                background: white;
+                border-radius: 4px;
+                cursor: pointer;
+                font-size: 14px;
+              ">Cancel</button>
+              <button type="button" id="modalContinue" style="
+                padding: 8px 20px;
+                border: none;
+                background: #2563eb;
+                color: white;
+                border-radius: 4px;
+                cursor: pointer;
+                font-size: 14px;
+                font-weight: 500;
+              ">Continue</button>
+            </div>
+          </div>
+        </div>
+      `;
+
+      // Inject in the DOM
+      const parentDoc = parent.document;
+      parentDoc.body.insertAdjacentHTML('beforeend', modalHTML);
+      const modal = parentDoc.getElementById('updateConfirmModal');
+      const btnCancel = parentDoc.getElementById('modalCancel');
+      const btnContinue = parentDoc.getElementById('modalContinue');
+
+      // Extract the focus from the input of the iframe.
+      // However, he is immediately captured by the editor.
+      // (attention: if Enter: adds a line to the page!)
+      btnCancel.focus();
+      setTimeout(() => {
+        parentDoc.getElementById('modalCancel')?.focus();
+       }, 0);
+
+      // Attach events to parent DOM elements
+      btnContinue.onclick = () => {
+        globalThis.syscall("event.dispatch", "updateConfirmResult", {
+          id: callId,
+          value: "yes"
+        });
+        modal.remove(); // optionnel : nettoyer le modal
+        };
+      btnCancel.onclick = () => {
+        globalThis.syscall("event.dispatch", "updateConfirmResult", {
+          id: callId,
+          value: "no"
+        });
+        modal.remove(); // optionnel : nettoyer le modal
+      };
+  };
 
   // !!!============================================
   // INITIALISATION
@@ -1524,14 +2228,14 @@ local function drawPanel(seeMess, clauseWhere)
       restoreScrollPosition();
     }, 50);
   }
-  // Variable globale
+  // Global variable
   const searchInput = document.getElementById("tileSearch");
   if (!searchInput) return;
 
-  // Installation des menus et des évènements
+  // Installation of menus and events
   initializeSearchMenu(searchInput);
 
-  // Réglage visuel de la zone de recherche
+  // Visual adjustment of the search area
   const inputSearch = document.querySelector('#tileSearch');
   document.querySelectorAll('.mode-switcher div').forEach(el => el.classList.remove('active'));
   searchModeEnCours = sessionStorage.getItem("searchMode");
@@ -1545,6 +2249,11 @@ local function drawPanel(seeMess, clauseWhere)
       btn.classList.add('active');
       inputSearch.placeholder = "\u00A0\u00A0\u00A0\u00A0...\u00A0\u00A0 clause where (query with Enter or Esc to exit)";
       searchInput.style.backgroundColor = "#F2F7FF";
+    } else if (searchModeEnCours === "update") {
+      const btn = document.querySelector('#updateMode');
+      btn.classList.add('active');
+      inputSearch.placeholder = "\u00A0\u00A0\u00A0\u00A0...\u00A0\u00A0 add:name[=value] | delete:name | rename:old->new (Enter to execute)";
+      searchInput.style.backgroundColor = "#FFF8E1";
     }
 })();
 
@@ -1569,159 +2278,151 @@ local function drawPanel(seeMess, clauseWhere)
               await syscall('editor.navigate', internalPath, false, false);
           }
       };
-
-// 3) ---------------- Load Styles Once ----------------
-    function ensureElement(id, tag, attributes, content) {
-        if (document.getElementById(id)) return document.getElementById(id);
-        const el = document.createElement(tag);
-        el.id = id;
-        for (let key in attributes) el.setAttribute(key, attributes[key]);
-        if (content) el.innerHTML = content;
-        document.head.appendChild(el);
-        return el;
-    }
-
-ensureElement("silverbullet-main-css", "link", { rel: "stylesheet", href: "/.client/main.css"});
-ensureElement("explorer-style-css", "link", { rel: "stylesheet", href: "/.fs/Library/Mr-xRed/docex_styles.css" });
-
-    if (!document.getElementById("explorer-custom-styles-once")) {
-        const parentStyles = parent.document.getElementById("custom-styles")?.innerHTML || "";
-        const cleanStyles = parentStyles.replace(/<\/?style>/g, "");
-        const styleEl = document.createElement("style");
-        styleEl.id = "explorer-custom-styles-once";
-        styleEl.innerHTML = cleanStyles;
-        document.head.appendChild(styleEl);
-    }
-
-})();
 ]]
-    -- ----------------- DISPLAY -----------------
+
+  -- ----------------- DISPLAY -----------------
+  editor.showProgress(90, "PANEL ...")
+  js.window.setTimeout(function()
     editor.showPanel(PANEL_ID, currentWidth, finalHtml, script)
-    PANEL_VISIBLE = true
-    clientStore.set("explorer2.open", "true")
+  end, 100)
+  editor.showProgress()
+  PANEL_VISIBLE = true
+  clientStore.set("explorer2.open", "true")
 end
 
 -- ----------------- COMMANDS ------------------
 
 command.define {
-    name = "TaskExplorer: Change View Mode",
-    hide = true,
-    run = function(args)
-        if args.mode ~= "grid" then
-            clientStore.set(VIEW2_MODE_KEY, args.mode)
-            local clauseWhereInSession = ""
-            clauseWhereInSession = js.window.sessionStorage.getItem("searchTerm")
-            drawPanel("maj", clauseWhereInSession)
-        else
-            editor.flashNotification("mode inconnu !")
-        end
+  name = "TaskExplorer: Change View Mode",
+  hide = true,
+  run = function(args)
+    if args.mode ~= "grid" then
+      clientStore.set(VIEW2_MODE_KEY, args.mode)
+      local clauseWhereInSession = ""
+      clauseWhereInSession = js.window.sessionStorage.getItem("searchTerm")
+      drawPanel("maj", clauseWhereInSession)
+    else
+      editor.flashNotification("mode inconnu !")
     end
+  end
 }
 
 command.define {
-    name = "TaskExplorer: Toggle Opening Mode",
-    hide = true,
-    run = function()
-        local current = clientStore.get("explorer2.disableFilter")
-        if current == "true" then
-            clientStore.set("explorer2.disableFilter", "false")
-        else
-            clientStore.set("explorer2.disableFilter", "true")
-        end
-        drawPanel("maj")
+  name = "TaskExplorer: Toggle Opening Mode",
+  hide = true,
+  run = function()
+    local current = clientStore.get("explorer2.disableFilter")
+    if current == "true" then
+      clientStore.set("explorer2.disableFilter", "false")
+    else
+      clientStore.set("explorer2.disableFilter", "true")
     end
+    drawPanel("maj")
+  end
 }
 
 command.define {
-    name = "Navigate: Task Explorer",
-    hide = true,
-    run = function()
-        if PANEL_VISIBLE then
-            editor.hidePanel(PANEL_ID)
-            PANEL_VISIBLE = false
-            clientStore.set("explorer2.open", "false")
-        else
-            --Réinitialisation
-            js.window.sessionStorage.setItem("searchMode", "list")
-            js.window.sessionStorage.setItem("searchInit", "true")
-            js.window.sessionStorage.setItem("searchTermInit", WHERE_INIT)
-            js.window.sessionStorage.setItem("searchTerm", WHERE_INIT)
-            js.window.sessionStorage.setItem("searchTermFilter", "")
-            -- Exécution
-            drawPanel()
-        end
+  name = "Navigate: Task Explorer",
+  hide = true,
+  run = function()
+    if PANEL_VISIBLE then
+      editor.hidePanel(PANEL_ID)
+      PANEL_VISIBLE = false
+      clientStore.set("explorer2.open", "false")
+    else
+      -- Reset
+      js.window.sessionStorage.setItem("searchMode", "list")
+      js.window.sessionStorage.setItem("searchInit", "true")
+      js.window.sessionStorage.setItem("searchTermInit", WHERE_INIT)
+      js.window.sessionStorage.setItem("searchTerm", WHERE_INIT)
+      js.window.sessionStorage.setItem("searchTermFilter", "")
+      -- Execution
+      drawPanel()
     end
+  end
 }
 
 command.define {
-    name = "Navigate: Toggle Task Explorer",
-    key = "Ctrl-Alt-v",
-    run = function()
-        if PANEL_VISIBLE then
-            editor.hidePanel(PANEL_ID)
-            PANEL_VISIBLE = false
-        else
-            local lastMode = clientStore.get("explorer2.currentDisplayMode") or "panel"
-            if lastMode == "window" then
-                editor.invokeCommand("Navigate: Task Explorer Window")
-            else
-                editor.invokeCommand("Navigate: Task Explorer")
-            end
-        end
+  name = "Navigate: Toggle Task Explorer",
+  key = "Ctrl-Alt-v",
+  run = function()
+    if PANEL_VISIBLE then
+      editor.hidePanel(PANEL_ID)
+      PANEL_VISIBLE = false
+    else
+      local lastMode = clientStore.get("explorer2.currentDisplayMode") or "panel"
+      if lastMode == "window" then
+        editor.invokeCommand("Navigate: Task Explorer Window")
+      else
+        editor.invokeCommand("Navigate: Task Explorer")
+      end
     end
+  end
 }
 
 command.define {
-    name = "Navigate: Task Explorer Window",
-    hide = true,
-    run = function()
-        local selector = "#sb-main .sb-panel." .. PANEL_ID
-        if not PANEL_VISIBLE then
-            --Réinitialisation
-            js.window.sessionStorage.setItem("searchMode", "list")
-            js.window.sessionStorage.setItem("searchInit", "true")
-            js.window.sessionStorage.setItem("searchTermInit", WHERE_INIT)
-            js.window.sessionStorage.setItem("searchTerm", WHERE_INIT)
-            js.window.sessionStorage.setItem("searchTermFilter", "")
-            -- Exécution
-            drawPanel()
-        end
-        clientStore.set("explorer2.open", "true")
-        js.import("/.fs/Library/Mr-xRed/UnifiedAdvancedPanelControl.js").enableWindow(selector)
+  name = "Navigate: Task Explorer Window",
+  hide = true,
+  run = function()
+    local selector = "#sb-main .sb-panel." .. PANEL_ID
+    if not PANEL_VISIBLE then
+      --Reset
+      js.window.sessionStorage.setItem("searchMode", "list")
+      js.window.sessionStorage.setItem("searchInit", "true")
+      js.window.sessionStorage.setItem("searchTermInit", WHERE_INIT)
+      js.window.sessionStorage.setItem("searchTerm", WHERE_INIT)
+      js.window.sessionStorage.setItem("searchTermFilter", "")
+      -- Execution
+      drawPanel()
     end
+    clientStore.set("explorer2.open", "true")
+    js.import("/.fs/Library/Mr-xRed/UnifiedAdvancedPanelControl.js").enableWindow(selector)
+  end
 }
 
 command.define {
-    name = "Open: Instructions",
-    hide = false,
-    run = function()
-        js.import("/.fs/Library/Mr-xRed/UnifiedAdvancedPanelControl.js").show(
-            "Library/baudogit/Instructions_for_Task_Explorer")
-    end
+  name = "Open: Instructions",
+  hide = false,
+  run = function()
+    js.import("/.fs/Library/Mr-xRed/UnifiedAdvancedPanelControl.js").show(
+      "Library/baudogit/Instructions_for_Task_Explorer")
+  end
 }
 
 command.define {
-    name = "Task: Toggle_Done",
-    hide = true,
-    run = function(args)
-        local param1 = args[1]
-        local param2 = args[2]
-        local param3 = args[3]
-        local param4 = args[4]
-        toggleTaskRemote(param1, param2, param3, param4)
-    end
+  name = "Task: Toggle_Done",
+  hide = true,
+  run = function(args)
+    local param1 = args[1]
+    local param2 = args[2]
+    local param3 = args[3]
+    local param4 = args[4]
+    toggleTaskRemote(param1, param2, param3, param4)
+  end
 }
 
 command.define {
-    name = "TaskExplorer: ExecuteQuery",
-    hide = true,
-    run = function(args)
-        local param1 = args[1]
-        local param2 = args[2]
-        drawPanel(param1, param2)
-    end
+  name = "TaskExplorer: ExecuteQuery",
+  hide = true,
+  run = function(args)
+    local param1 = args[1]
+    local param2 = args[2]
+    drawPanel(param1, param2)
+  end
 }
 
+command.define {
+  name = "TaskExplorer: UpdateAttributes",
+  hide = true,
+  run = function(args)
+    js.log(args)
+    local taskIds = args[1]
+    local action = args[2]
+    local attributeName = args[3]
+    local newValue = args[4] or ""
+    updateTaskAttributes(taskIds, action, attributeName, newValue)
+  end
+}
 
 ```
 
@@ -1768,11 +2469,11 @@ function queryWithParam (clauseWhere)
   -- local queryTxt = { where = lua.parseExpression("_.done == optionValue") }
   -- local results = index.queryLuaObjects(tagName, queryTxt, { optionValue = true } )
   
-  -- !! Does not work: os.time inutilisable !!
+  -- !! This does not work (os.time) !!
   --clauseWhere = some(_.completed) ~= nil and string.sub(_.completed,1,10) >= (os.date('%Y-%m-%d', os.time() - (5 * 24 * 60 * 60)))
     --clauseWhere = some(_.completed) ~= nil and (string.sub(_.completed,1,10) >= os.date('%Y-%m-%d',  os.time({ year = 2025, month = 12, day = 21 })))
 
-  -- To test: modify and uncomment below. This squizzle the mode where.
+  -- To test: modify and uncomment below. This squizzle all the parameters.
   -- clauseWhere = "_.done == not true or _.done == true"
 
   -- Check the validity of the where clause
@@ -1832,6 +2533,8 @@ function tasksByPage(allTasks, viewMode, clauseWhere)
     queryTasks = queryWithParam(clauseWhere)
   end
 
+  js.log(queryTasks)
+
    -- Break down tasks by page
   local pageTasks = {}
   local countTasks = 0
@@ -1846,20 +2549,27 @@ function tasksByPage(allTasks, viewMode, clauseWhere)
   -- Build html with templates
   local html = ""
   if viewMode == "list" then
+    local nb = 1
+    local nbT = #queryTasks
     for pageName, tasks in pairs(pageTasks) do
       html = html .. pageTasksTemplate({
         tasks = tasks
       })
+      nb = nb + #tasks
+      editor.showProgress(math.floor((nb/nbT)*100), "mon-type")
     end
-  else    
+  else
+    local nb = 0
+    local nbT = #queryTasks
     for pageName, tasks in pairs(pageTasks) do
       html = html .. pageTasksPerPageTemplate({
         pageName = pageName,
         tasks = tasks
       })
+      nb = nb + #tasks
+      editor.showProgress(math.floor((nb/nbT)*100), "mon-type")
     end
   end
-
   return {html, countTasks}
 end
 
@@ -1904,10 +2614,9 @@ function formatTask(taskString)
     if not taskString or taskString == "" then
         return ""
     end
-  
   local ICONS = {
-    square    = '<svg class="icon-svg" style="width: 1em; height: 1em; vertical-align: middle;"><use href="/.fs/Library/baudogit/lucide-icons.svg#icon-square"></use></svg>',
-    squarecheck = '<svg class="icon-svg" style="width: 1em; height: 1em; vertical-align: middle;"><use href="/.fs/Library/baudogit/lucide-icons.svg#icon-square-check"></use></svg>'
+    square = '<svg class="icon-svg" style="width: 1em; height: 1em; vertical-align: middle;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/></svg>',
+    squarecheck ='<svg class="icon-svg" style="width: 1em; height: 1em; vertical-align: middle;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="m9 12 2 2 4-4"/></svg>',
   }
   
     local reference = ""
@@ -1923,7 +2632,7 @@ function formatTask(taskString)
     local namePage = ""
     local listArgs = {}
     local nameIcon = ""
-
+  
     -- ---------- Analyse STRING ---------
   
     if sepPos then
@@ -1960,7 +2669,6 @@ function formatTask(taskString)
         reference = taskString:match("^([^%s]+)") or ""
         tempString = taskString:gsub("^[^%s]+%s+", "")
     end
-    tempStringInit = tempString .. "\nITAGS: " .. itags
 
     -- Extracting the name to display (after the last /)
     local displayName = reference
@@ -2083,6 +2791,8 @@ function formatTask(taskString)
         end
     end
 
+      tempStringInit = tempString .. "\n" .. taskId .. "       ITAGS: " .. itags
+
     -- Add data-task-id to div
     local html = '<div class="' .. divClass .. '" data-task-id="' .. taskId .. '">'
 
@@ -2109,7 +2819,7 @@ function formatTask(taskString)
       nameIcon = ICONS.square
       doneReal = " "
     end  
-    -- html (onclick) > js (script) > syscall (invokeCommand) > space-lua (function)
+    -- schema : html (onclick) > js (script) > syscall (invokeCommand) > space-lua (function)
     html = html .. '<span style="cursor: pointer;" onclick="toggleTask(\'' ..   
     string.gsub(namePage or "", "'", "\\'") .. '\',' ..   
     (positionStart or "0") .. ',\'' ..   
@@ -2118,7 +2828,7 @@ function formatTask(taskString)
     html = html .. nameIcon .. '</span> '
 
     -- Enclosing DIV  
-    -- Link to open the task page 
+    -- 1st line: label with link to open the task page 
     if reference:find("@", 1, true) then
       local optionView = clientStore.get("explorer2.disableFilter")
       html = html .. '<div id="divTaskchild" title="' .. escapeHtml(tempStringInit) .. '" onclick='
@@ -2134,14 +2844,21 @@ function formatTask(taskString)
         html = html .. escapeHtml(displayName) .. ' ' .. '<br /> '
     end
 
-    -- Attributes
+    -- 2nd line: attributes. Original structure is preserved with sb-task = " "
+    -- between each attribute but task text is compiled on the 1st ligne (label)
     for _, attr in ipairs(attributes) do
         html = html .. '<span class="sb-list sb-task"> </span>'
         html = html .. '<span class="sb-attribute" data-' .. attr.key .. '="' .. escapeHtml(attr.value) .. '">'
         html = html .. '<span class="sb-list sb-frontmatter sb-meta">[</span>'
-        html = html .. '<span class="sb-list sb-frontmatter sb-atom">' .. escapeHtml(attr.key) .. '</span>'
+        -- depending to SilverBullet version date
+        local dateVersion = js.window.sessionStorage.getItem("dateVersion")
+        if dateVersion >= "2026-02-06" then
+          html = html .. '<span class="sb-list sb-frontmatter sb-attribute-name">' .. escapeHtml(attr.key) .. '</span>'
+        else
+          html = html .. '<span class="sb-list sb-frontmatter sb-atom">' .. escapeHtml(attr.key) .. '</span>'
+        end
         html = html .. '<span class="sb-list sb-frontmatter sb-meta">: </span>'
-        html = html .. '<span class="sb-list sb-frontmatter">' .. escapeHtml(attr.value) .. '</span>'
+        html = html .. '<span class="sb-list sb-frontmatter sb-attribute-value">' .. escapeHtml(attr.value) .. '</span>'
         html = html .. '<span class="sb-list sb-frontmatter sb-meta">]</span>'
         html = html .. '</span>'
     end
